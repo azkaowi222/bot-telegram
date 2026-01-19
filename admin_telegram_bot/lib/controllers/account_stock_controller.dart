@@ -12,7 +12,10 @@ class AccountStockController extends ChangeNotifier {
   Future<void> getAllAccountsStocks() async {
     isLoading = true;
     try {
-      final response = await http.get(Uri.parse('$backendUrl/api/accounts'));
+      final response = await http.get(
+        Uri.parse('$backendUrl/api/accounts'),
+        headers: {'ngrok-skip-browser-warning': '1'},
+      );
       final data = jsonDecode(response.body);
       if (response.statusCode != 200) {
         print('failed to load accounts: ${data['message']}');
@@ -51,6 +54,45 @@ class AccountStockController extends ChangeNotifier {
       final json = jsonDecode(response.body);
       final data = json['data'];
       _accountsStocks.add(AccountStock.fromJson(data));
+    } catch (e) {
+      print('Error exception ${e.toString()}');
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<int?> updateAccountStock(AccountStock account) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('$backendUrl/api/account/edit/${account.id}'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'productId': account.product['id'],
+          'email': account.email,
+          'password': account.password,
+          'metadata': account.metadata,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        print('Failed to add stock');
+        return response.statusCode;
+      }
+      final json = jsonDecode(response.body);
+      final data = json['data'];
+      _accountsStocks.forEach((element) {
+        print(element.email);
+      });
+      final emailIndex = _accountsStocks.indexWhere((
+        AccountStock accountIndex,
+      ) {
+        return accountIndex.id == account.id;
+      });
+      print('emailIndex: $emailIndex');
+      _accountsStocks.replaceRange(emailIndex, emailIndex + 1, [
+        AccountStock.fromJson(data),
+      ]);
+      return response.statusCode;
     } catch (e) {
       print('Error exception ${e.toString()}');
     } finally {

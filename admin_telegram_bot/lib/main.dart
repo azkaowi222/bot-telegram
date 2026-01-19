@@ -107,12 +107,15 @@ class _MainPageState extends State<MainPage> {
     setState(() {});
   }
 
+  final TextEditingController categoryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final productCategories =
         productController.products.map((product) {
           return product.category;
         }).toList();
+    productCategories.add('New categorie');
     final num deviceHeight = MediaQuery.of(context).size.height;
     final num deviceWidth = MediaQuery.of(context).size.width;
     final List<Widget> pages = [
@@ -316,80 +319,83 @@ class _MainPageState extends State<MainPage> {
                                             SizedBox(height: 5),
                                             Row(
                                               children: [
-                                                Container(
-                                                  width: deviceWidth * 0.4,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          8.0,
-                                                        ),
-                                                    border: Border.all(
-                                                      width: 1.5,
-                                                      color: Colors.black
-                                                          .withValues(
-                                                            alpha: 0.2,
+                                                Expanded(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8.0,
                                                           ),
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Radio<Status>(
-                                                        value: Status.active,
-                                                        visualDensity:
-                                                            VisualDensity
-                                                                .compact,
-                                                        // selected: true,
-                                                        groupValue:
-                                                            _selectedMethod,
-                                                        onChanged: (value) {
-                                                          seBottomState(
-                                                            () =>
-                                                                _selectedMethod =
-                                                                    value,
-                                                          );
-                                                        },
+                                                      border: Border.all(
+                                                        width: 1.5,
+                                                        color: Colors.black
+                                                            .withValues(
+                                                              alpha: 0.2,
+                                                            ),
                                                       ),
-                                                      Text('Active'),
-                                                    ],
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Radio<Status>(
+                                                          value: Status.active,
+                                                          visualDensity:
+                                                              VisualDensity
+                                                                  .compact,
+                                                          // selected: true,
+                                                          groupValue:
+                                                              _selectedMethod,
+                                                          onChanged: (value) {
+                                                            seBottomState(
+                                                              () =>
+                                                                  _selectedMethod =
+                                                                      value,
+                                                            );
+                                                          },
+                                                        ),
+                                                        Text('Active'),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                                SizedBox(width: 48),
-                                                Container(
-                                                  width: deviceWidth * 0.4,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          8.0,
-                                                        ),
-                                                    border: Border.all(
-                                                      width: 1.5,
-                                                      color: Colors.black
-                                                          .withValues(
-                                                            alpha: 0.2,
+                                                SizedBox(width: 30),
+                                                Expanded(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8.0,
                                                           ),
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Radio<Status>(
-                                                        value: Status.inactive,
-
-                                                        visualDensity:
-                                                            VisualDensity
-                                                                .compact,
-                                                        // selected: true,
-                                                        groupValue:
-                                                            _selectedMethod,
-                                                        onChanged: (value) {
-                                                          seBottomState(
-                                                            () =>
-                                                                _selectedMethod =
-                                                                    value,
-                                                          );
-                                                        },
+                                                      border: Border.all(
+                                                        width: 1.5,
+                                                        color: Colors.black
+                                                            .withValues(
+                                                              alpha: 0.2,
+                                                            ),
                                                       ),
-                                                      Text('Inactive'),
-                                                    ],
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Radio<Status>(
+                                                          value:
+                                                              Status.inactive,
+
+                                                          visualDensity:
+                                                              VisualDensity
+                                                                  .compact,
+                                                          // selected: true,
+                                                          groupValue:
+                                                              _selectedMethod,
+                                                          onChanged: (value) {
+                                                            seBottomState(
+                                                              () =>
+                                                                  _selectedMethod =
+                                                                      value,
+                                                            );
+                                                          },
+                                                        ),
+                                                        Text('Inactive'),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -457,7 +463,7 @@ class _MainPageState extends State<MainPage> {
                                                 subtitle: Text(
                                                   category.isEmpty
                                                       ? 'Add category'
-                                                      : category,
+                                                      : '- $category',
                                                 ),
                                                 trailing: PopupMenuButton(
                                                   color: Colors.white,
@@ -484,18 +490,92 @@ class _MainPageState extends State<MainPage> {
                                                       categoryProduct,
                                                     ) {
                                                       return PopupMenuItem(
-                                                        child: TextButton(
-                                                          onPressed: () {
-                                                            seBottomState(() {
-                                                              category =
-                                                                  '- $categoryProduct';
-                                                            });
-                                                            Navigator.pop(
-                                                              context,
-                                                            );
-                                                          },
-                                                          child: Text(
-                                                            categoryProduct,
+                                                        child: SizedBox(
+                                                          width:
+                                                              double.infinity,
+                                                          child: TextButton(
+                                                            onPressed: () {
+                                                              if (categoryProduct
+                                                                  .contains(
+                                                                    'New',
+                                                                  )) {
+                                                                Navigator.pop(
+                                                                  context,
+                                                                );
+                                                                showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder: (
+                                                                    context,
+                                                                  ) {
+                                                                    return Dialog(
+                                                                      shape: OutlineInputBorder(
+                                                                        borderSide:
+                                                                            BorderSide.none,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                              2,
+                                                                            ),
+                                                                      ),
+                                                                      child: Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(
+                                                                              8,
+                                                                            ),
+                                                                        child: Form(
+                                                                          key:
+                                                                              _formKey,
+                                                                          child: TextFormField(
+                                                                            onFieldSubmitted: (
+                                                                              newValue,
+                                                                            ) {
+                                                                              seBottomState(
+                                                                                () {
+                                                                                  category =
+                                                                                      newValue;
+                                                                                },
+                                                                              );
+                                                                              Navigator.pop(
+                                                                                context,
+                                                                              );
+                                                                            },
+                                                                            decoration: InputDecoration(
+                                                                              labelText:
+                                                                                  'New category',
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                            ),
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            controller:
+                                                                                categoryController,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
+                                                                              }
+                                                                              return null;
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                                return;
+                                                              }
+                                                              seBottomState(() {
+                                                                category =
+                                                                    categoryProduct;
+                                                              });
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              categoryProduct,
+                                                            ),
                                                           ),
                                                         ),
                                                       );

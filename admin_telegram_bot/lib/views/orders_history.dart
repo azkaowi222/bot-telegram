@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/orders_history_controller.dart';
-import '../models/order_history.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   final String status;
@@ -96,6 +95,7 @@ class _OrdersHistoryPageState extends State<OrderHistoryPage> {
                               ),
                               child: Image.network(
                                 '$backendUrl/${order.image}',
+                                headers: {'ngrok-skip-browser-warning': '1'},
                                 fit: BoxFit.cover,
                               ),
                             ),

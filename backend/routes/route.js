@@ -20,7 +20,11 @@ import {
   getOrderById,
   getOrderHistory,
 } from "../controller/orderController.js";
-import { getAllAccounts, addAccount } from "../controller/accountController.js";
+import {
+  getAllAccounts,
+  addAccount,
+  updateAccount,
+} from "../controller/accountController.js";
 
 const router = express.Router();
 
@@ -46,6 +50,7 @@ router.get("/order/history/:telegramId", getOrderHistory);
 //account controller
 router.get("/accounts", getAllAccounts);
 router.post("/account/add", addAccount);
+router.patch("/account/edit/:id", updateAccount);
 
 //broadcast
 router.post("/broadcast", sendBroadcast);

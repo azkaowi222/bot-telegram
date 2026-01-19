@@ -42,3 +42,33 @@ export const addAccount = async (req, res) => {
     });
   }
 };
+
+export const updateAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { productId, email, password, metadata } = req.body;
+    const account = await Account.findByIdAndUpdate(
+      id,
+      {
+        productId,
+        email,
+        password,
+        metadata,
+      },
+      { new: true, runValidators: true },
+    ).lean();
+    const product = await Product.findById(productId).lean();
+    return res.status(200).json({
+      status: "success",
+      data: {
+        ...account,
+        product,
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};

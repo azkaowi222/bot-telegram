@@ -380,6 +380,7 @@ class _ProductsState extends State<Products> {
                           ),
                           child: Image.network(
                             '$backendUrl/${product.imgPath}',
+                            headers: {'ngrok-skip-browser-warning': '1'},
                             fit: BoxFit.cover,
                           ),
                         ),

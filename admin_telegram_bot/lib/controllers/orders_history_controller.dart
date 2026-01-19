@@ -15,7 +15,10 @@ class OrdersHistoryController extends ChangeNotifier {
     notifyListeners();
     try {
       final uri = Uri.parse('$backendUrl/api/orders');
-      final response = await http.get(uri);
+      final response = await http.get(
+        uri,
+        headers: {'ngrok-skip-browser-warning': '1'},
+      );
       // debugPrint(jsonDecode(response.body).toString());
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

@@ -24,13 +24,14 @@ class AccountStock {
   });
 
   factory AccountStock.fromJson(Map<String, dynamic> json) {
+    print(json);
     return AccountStock(
       id: json['_id'] ?? 'no _id',
       product: json['product'] ?? {'product': 'no product'},
       email: json['email'],
       password: json['password'],
       status: json['status'],
-      category: json['product']?['name'] ?? 'no category',
+      category: json['product']?['category'] ?? 'no category',
       order: json['order'] ?? 'no order',
       createdAt: json['createdAt'] ?? 'no created at',
       metadata: json['metadata'] ?? {'2fa': 'no 2fa'},

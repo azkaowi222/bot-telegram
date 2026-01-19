@@ -8,8 +8,10 @@ import 'package:http/http.dart' as http;
 
 class ProductController extends ChangeNotifier {
   final List<ProductModel> _masterData = [];
+  final List<String> _categories = [];
   List<ProductModel> _products = [];
   List<ProductModel> get products => _products;
+  List<String> get categories => _categories;
   File? _image;
   File? get images => _image;
   set images(File? value) {
@@ -60,12 +62,14 @@ class ProductController extends ChangeNotifier {
         _products.clear();
         _products.clear();
         _masterData.clear();
+        _categories.clear();
         final datas = jsonDecode(response.body);
         // print(datas.toString());
         for (final data in datas['data'] as List) {
           _products.add(ProductModel.fromJson(data));
           _masterData.add(ProductModel.fromJson(data));
         }
+       
         isLoading = false;
         notifyListeners();
         // print("Data Berhasil: $data");
@@ -215,4 +219,12 @@ class ProductController extends ChangeNotifier {
       return 'failed to send broadcast';
     }
   }
+
+  // Future<void> getAllCategories() async{
+  //   try {
+  //     final response = await http.get()
+  //   } catch(e) {
+  //     print('Error exception: ${e.toString()}');
+  //   }
+  // }
 }
