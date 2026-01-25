@@ -23,6 +23,7 @@ bot.use(
 
 let products = [];
 const getProducts = async () => {
+  products = [];
   const response = await fetch(`${process.env.BACKEND_URL}/api/products`);
   const { _, data } = await response.json();
   products = data.map((item) => {
@@ -201,11 +202,12 @@ const chunkArray = (arr, size) => {
   return result;
 };
 
-const listProduct = (ctx) => {
+const listProduct = async (ctx) => {
   const productButtons = products.map((product, i) =>
     Markup.button.callback(`${i + 1}`, `product_${product._id}`),
   );
   const rows = chunkArray(productButtons, 2);
+  await getProducts();
   const listProducts = products.map((product) => {
     return product.name;
   });
@@ -329,6 +331,7 @@ bot.action("backFromDetails", async (ctx) => {
     Markup.button.callback(`${i + 1}`, `product_${product._id}`),
   );
   const rows = chunkArray(productButtons, 2);
+  await getProducts();
   const listProducts = products.map((product) => {
     return product.name;
   });
