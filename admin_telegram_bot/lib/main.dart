@@ -12,7 +12,8 @@ import 'views/account.dart';
 
 enum Status { active, inactive }
 
-Future main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
