@@ -67,7 +67,6 @@ const onBuyHandler = async (ctx) => {
       }),
     });
     const data = await response.json();
-    console.log(data.payment);
     if (!response.ok) {
       throw new Error(data.message);
     }
@@ -210,7 +209,6 @@ const listProduct = (ctx) => {
   const listProducts = products.map((product) => {
     return product.name;
   });
-  console.log(listProducts);
   return ctx.replyWithHTML(
     `List produk di <b>MannStore</b>\n\n${listProducts
       .map((product, i) => {

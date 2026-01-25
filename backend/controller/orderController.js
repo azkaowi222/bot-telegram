@@ -102,7 +102,6 @@ export const createOrder = async (req, res) => {
     );
 
     const data = await response.json();
-    console.log(data);
 
     await session.commitTransaction();
     session.endSession();

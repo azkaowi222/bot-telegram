@@ -109,7 +109,7 @@ export const createProduct = async (req, res) => {
           isActive,
         },
       ],
-      { session }
+      { session },
     );
 
     const stock = await Account.countDocuments(
@@ -117,14 +117,14 @@ export const createProduct = async (req, res) => {
         product: product[0]._id,
         status: "available",
       },
-      { session }
+      { session },
     );
 
     const dirname = import.meta.dirname;
     const uploadPath = path.join(
       dirname.replace("controller", ""),
       "public",
-      image_path
+      image_path,
     );
 
     await image.mv(uploadPath);
@@ -179,7 +179,6 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { id, name } = req.body;
-    console.log(id, name);
     if (!id && !name) {
       throw Error("Required One, Id or name");
     }
@@ -268,7 +267,7 @@ export const sendBroadcast = async (req, res) => {
               chat_id: user.telegramId,
               text: message,
             }),
-          }
+          },
         );
 
         const data = await response.json();

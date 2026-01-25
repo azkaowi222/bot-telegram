@@ -13,18 +13,7 @@ dotenv.config({
 });
 dbConnect();
 
-// await account
-//   .updateMany(
-//     {
-//       status: "sold",
-//     },
-//     {
-//       status: "available",
-//     }
-//   )
-//   .catch(console.log);
-
-// console.log("sukses update");
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
@@ -32,7 +21,7 @@ app.use(fileupload());
 app.use(
   cors({
     origin: "*",
-  })
+  }),
 );
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
@@ -40,6 +29,6 @@ app.use("/api", apiRoutes);
 app.use("/api", webhookRoutes);
 
 //listen on port 3000
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("api running on port 3000");
 });

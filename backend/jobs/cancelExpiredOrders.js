@@ -14,7 +14,6 @@ cron.schedule("* * * * *", async () => {
     .lean();
 
   if (expiredOrders.length === 0) {
-    console.log("No expired orders.");
     return;
   }
 
@@ -25,20 +24,20 @@ cron.schedule("* * * * *", async () => {
       { _id: order._id, status: "pending" },
       {
         status: "expired",
-      }
+      },
     );
 
     await Payment.findOneAndUpdate(
       { order: order._id, status: "pending" },
       {
         status: "expired",
-      }
+      },
     );
 
     // Reset akun yang sudah di-reserve
     await Account.updateMany(
       { order: order._id, status: "reserved" },
-      { status: "available", order: null }
+      { status: "available", order: null },
     );
 
     await fetch("https://app.pakasir.com/api/transactioncancel", {
@@ -69,7 +68,7 @@ Pesanan dibatalkan. untuk membuat pesanan baru silahkan melakukan order ulang
           `,
           parse_mode: "Markdown",
         }),
-      }
+      },
     );
 
     console.log(`Order ${order._id} canceled`);
