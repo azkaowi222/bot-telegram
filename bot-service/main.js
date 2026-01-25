@@ -207,9 +207,16 @@ const listProduct = (ctx) => {
     Markup.button.callback(`${i + 1}`, `product_${product._id}`),
   );
   const rows = chunkArray(productButtons, 2);
-
+  const listProducts = products.map((product) => {
+    return product.name;
+  });
+  console.log(listProducts);
   return ctx.replyWithHTML(
-    "List produk di <b>MannStore</b>\n\n[ 1 ] Azure Students\n[ 2 ] DigitalOcean 10 Droplet\n[ 3 ] AWS Free Tier\n[ 4 ] Linode\n[ 5 ] Github Student Pack\n[ 6 ] Mail .edu (microsoft)\n\nPilih Akun :",
+    `List produk di <b>MannStore</b>\n\n${listProducts
+      .map((product, i) => {
+        return `[ ${i + 1} ] ${product}\n`;
+      })
+      .join("")}\n\nPilih Akun :`,
     Markup.inlineKeyboard([
       ...rows,
       [Markup.button.callback("🔙 Kembali", "back")],
@@ -324,9 +331,15 @@ bot.action("backFromDetails", async (ctx) => {
     Markup.button.callback(`${i + 1}`, `product_${product._id}`),
   );
   const rows = chunkArray(productButtons, 2);
-
+  const listProducts = products.map((product) => {
+    return product.name;
+  });
   return ctx.editMessageText(
-    "List produk di <b>MannStore</b>\n\n[ 1 ] Azure Students\n[ 2 ] DigitalOcean 10 Droplet\n[ 3 ] AWS Free Tier\n[ 4 ] Linode\n[ 5 ] Github Student Pack\n[ 6 ] Mail .edu (microsoft)\n\nPilih Akun :",
+    `List produk di <b>MannStore</b>\n\n${listProducts
+      .map((product, i) => {
+        return `[ ${i + 1} ] ${product}\n`;
+      })
+      .join("")}\n\nPilih Akun :`,
     {
       parse_mode: "HTML",
       reply_markup: {
@@ -417,7 +430,7 @@ bot.launch(async () => {
   await getProducts().catch(console.log);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
