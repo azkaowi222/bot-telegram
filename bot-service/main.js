@@ -1,6 +1,7 @@
 import { Input, Markup, session, Telegraf } from "telegraf";
 import qrcode from "qrcode";
 import dotenv from "dotenv";
+const http = require("http");
 
 dotenv.config({
   quiet: true,
@@ -17,7 +18,7 @@ bot.use(
         qty: 1,
       };
     },
-  })
+  }),
 );
 
 let products = [];
@@ -36,7 +37,7 @@ const onBuyHandler = async (ctx) => {
   const id = ctx.match[1];
   const { id: telegramId } = ctx.from;
   const userResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/user/${telegramId}`
+    `${process.env.BACKEND_URL}/api/user/${telegramId}`,
   );
   const {
     data: { _id },
@@ -108,7 +109,7 @@ Scan QR-CODE diatas untuk melakukan pembayaran. Bisa menggunakan E-wallet atau M
 ⏰ Pesanan akan dibatalkan otomatis dalam waktu 5 menit jika tidak ada pembayaran. 
         `,
         parse_mode: "Markdown",
-      }
+      },
     );
   } catch (error) {
     console.error(`catch error ${error.message}`);
@@ -121,7 +122,7 @@ const historyHandler = async (ctx) => {
   const telegramId = ctx.from.id;
 
   const response = await fetch(
-    `${process.env.BACKEND_URL}/api/order/history/${telegramId}`
+    `${process.env.BACKEND_URL}/api/order/history/${telegramId}`,
   );
   const result = await response.json();
   if (!result.data || result.data.length === 0) {
@@ -133,7 +134,7 @@ const historyHandler = async (ctx) => {
   for (const order of result.data) {
     text += `🆔 Order: \`${order._id}\`\n`;
     text += `📅 Tanggal: *${new Date(order.createdAt).toLocaleString(
-      "id-ID"
+      "id-ID",
     )}*\n`;
     text += `💵 Total: *Rp ${order.totalPrice.toLocaleString("id-ID")}K*\n`;
     text += `📌 Status: *${order.status}*\n`;
@@ -186,7 +187,7 @@ const mainMenu = async (ctx) => {
             [Markup.button.url("🆘 Bantuan", "https://t.me/Armann_29")],
           ],
         },
-      }
+      },
     );
   } catch (error) {
     console.error(error.message);
@@ -203,7 +204,7 @@ const chunkArray = (arr, size) => {
 
 const listProduct = (ctx) => {
   const productButtons = products.map((product, i) =>
-    Markup.button.callback(`${i + 1}`, `product_${product._id}`)
+    Markup.button.callback(`${i + 1}`, `product_${product._id}`),
   );
   const rows = chunkArray(productButtons, 2);
 
@@ -212,7 +213,7 @@ const listProduct = (ctx) => {
     Markup.inlineKeyboard([
       ...rows,
       [Markup.button.callback("🔙 Kembali", "back")],
-    ])
+    ]),
   );
 };
 
@@ -225,7 +226,7 @@ const detailProducts = (
     balance: 0,
     quantity: 1,
     stock: 0,
-  }
+  },
 ) => {
   return ctx.editMessageText(
     `📦 Detail Product\n\n🏷️ Nama: ${product.name}\n💵 Saldo: ${
@@ -246,12 +247,12 @@ const detailProducts = (
             Markup.button.callback("🔙 Kembali", `backFromDetails`),
             Markup.button.callback(
               "💰 Beli Sekarang",
-              `buy_${product.productId}`
+              `buy_${product.productId}`,
             ),
           ],
         ],
       },
-    }
+    },
   );
 };
 
@@ -288,7 +289,7 @@ bot.action("back", async (ctx) => {
           [Markup.button.url("🆘 Bantuan", "https://t.me/Armann_29")],
         ],
       },
-    }
+    },
   );
 });
 
@@ -301,7 +302,7 @@ bot.action(/^product_(.+)$/, async (ctx) => {
 
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/api/stock/${product._id}`
+      `${process.env.BACKEND_URL}/api/stock/${product._id}`,
     );
     const { stock } = await response.json();
     ctx.session[`${prefix}stock`] = stock;
@@ -320,7 +321,7 @@ bot.action(/^product_(.+)$/, async (ctx) => {
 
 bot.action("backFromDetails", async (ctx) => {
   const productButtons = products.map((product, i) =>
-    Markup.button.callback(`${i + 1}`, `product_${product._id}`)
+    Markup.button.callback(`${i + 1}`, `product_${product._id}`),
   );
   const rows = chunkArray(productButtons, 2);
 
@@ -334,7 +335,7 @@ bot.action("backFromDetails", async (ctx) => {
           [Markup.button.callback("🔙 Kembali", "back")],
         ],
       },
-    }
+    },
   );
 });
 
@@ -345,7 +346,7 @@ bot.action(/^plus_(.+)$/, async (ctx) => {
 
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/api/stock/${product._id}`
+      `${process.env.BACKEND_URL}/api/stock/${product._id}`,
     );
     const { stock } = await response.json();
 
@@ -386,7 +387,7 @@ bot.action(/^minus_(.+)$/, async (ctx) => {
 
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/api/stock/${product._id}`
+      `${process.env.BACKEND_URL}/api/stock/${product._id}`,
     );
     const { stock } = await response.json();
 
@@ -416,6 +417,16 @@ bot.launch(async () => {
   await getProducts().catch(console.log);
 });
 
+const port = process.env.PORT || 3000;
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.end("Bot is running smoothly!");
+});
+
+server.listen(port, () => {
+  console.log(`Dummy server listening on port ${port}`);
+});
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
