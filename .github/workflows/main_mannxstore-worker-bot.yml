@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - mannxstore-bot
+name: Build and deploy Node.js app to Azure Web App - mannxstore-worker-bot
 
 on:
   push:
@@ -61,6 +61,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "mannxstore-bot"
+          app-name: "mannxstore-worker-bot"
           slot-name: "Production"
           package: release.zip
