@@ -1,7 +1,7 @@
 import { Input, Markup, session, Telegraf } from "telegraf";
 import qrcode from "qrcode";
 import dotenv from "dotenv";
-const http = require("http");
+import http from "http";
 
 dotenv.config({
   quiet: true,
