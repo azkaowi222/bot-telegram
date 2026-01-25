@@ -13,8 +13,6 @@ dotenv.config({
 });
 dbConnect();
 
-const PORT = process.env.PORT || 3000;
-
 // await account
 //   .updateMany(
 //     {
@@ -34,7 +32,7 @@ app.use(fileupload());
 app.use(
   cors({
     origin: "*",
-  }),
+  })
 );
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
@@ -42,6 +40,6 @@ app.use("/api", apiRoutes);
 app.use("/api", webhookRoutes);
 
 //listen on port 3000
-app.listen(PORT, () => {
+app.listen(3000, () => {
   console.log("api running on port 3000");
 });
