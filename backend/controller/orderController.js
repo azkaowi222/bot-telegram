@@ -12,14 +12,14 @@ export const createOrder = async (req, res) => {
 
   try {
     const { user, items } = req.body;
-    const expiredOrders = new Date(Date.now() + 2 * 60 * 1000);
+    const expiredOrders = new Date(Date.now() + 5 * 60 * 1000);
 
     let totalPrice = 0;
     const order = await Order.create(
       [{ user, totalPrice: 0, expiresAt: expiredOrders }],
       {
         session,
-      }
+      },
     );
     const createdOrderItems = [];
 
@@ -56,7 +56,7 @@ export const createOrder = async (req, res) => {
             accounts: availableAccounts.map((acc) => acc._id),
           },
         ],
-        { session }
+        { session },
       );
 
       createdOrderItems.push(orderItem);
@@ -79,7 +79,7 @@ export const createOrder = async (req, res) => {
           status: "pending",
         },
       ],
-      { session }
+      { session },
     );
 
     // update total price
@@ -98,7 +98,7 @@ export const createOrder = async (req, res) => {
           amount: Number(`${payment[0].amount}000`),
           api_key: process.env.API_KEY,
         }),
-      }
+      },
     );
 
     const data = await response.json();
