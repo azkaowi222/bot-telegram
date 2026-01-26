@@ -34,7 +34,7 @@ const getProducts = async () => {
 };
 
 const onBuyHandler = async (ctx) => {
-  await ctx.answerCbQuery();
+  // await ctx.answerCbQuery();
   const id = ctx.match[1];
   const { id: telegramId } = ctx.from;
   const userResponse = await fetch(
@@ -46,6 +46,7 @@ const onBuyHandler = async (ctx) => {
   const product = products.find((product) => product._id === id);
   const prefix = product.name.split(" ")[0];
   if (ctx.session[`${prefix}stock`] === 0) {
+    console.log("stock kosong");
     return await ctx.answerCbQuery("⚠️ Maaf stock kosong!", {
       show_alert: true,
     });
