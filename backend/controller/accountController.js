@@ -46,14 +46,32 @@ export const addAccount = async (req, res) => {
 export const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
-    const { productId, email, password, metadata } = req.body;
-    const account = await Account.findByIdAndUpdate(
-      id,
+    const { productId, email, password, status, metadata } = req.body;
+    console.log({
+      productId,
+      email,
+      password,
+      status,
+      metadata,
+    });
+    const account = await Account.findById(id);
+    const isHasOrder = account.get("order");
+    if (isHasOrder) {
+      return res.status(409).json({
+        status: "failed",
+        message: "account has order",
+      });
+    }
+    const accountUpdate = await Account.findOneAndUpdate(
+      {
+        _id: id,
+      },
       {
         productId,
         email,
         password,
         metadata,
+        status,
       },
       { new: true, runValidators: true },
     ).lean();
@@ -61,7 +79,7 @@ export const updateAccount = async (req, res) => {
     return res.status(200).json({
       status: "success",
       data: {
-        ...account,
+        ...accountUpdate,
         product,
       },
     });
