@@ -71,6 +71,7 @@ class AccountStockController extends ChangeNotifier {
           'email': account.email,
           'password': account.password,
           'metadata': account.metadata,
+          'status': account.status,
         }),
       );
 

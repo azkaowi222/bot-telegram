@@ -40,6 +40,9 @@ class _StocksPageState extends State<StocksPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController metadataController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
+  final List<String> status = ['available', 'reserved', 'sold'];
+  String? statusValue;
   String? dropdownValue;
   String? emailForFind;
   double keyboarHeight = 0;
@@ -117,6 +120,7 @@ class _StocksPageState extends State<StocksPage> {
                                                   emailController.clear();
                                                   passwordController.clear();
                                                   metadataController.clear();
+                                                  statusValue = null;
                                                   showModalBottomSheet(
                                                     isScrollControlled: true,
                                                     context: context,
@@ -188,7 +192,9 @@ class _StocksPageState extends State<StocksPage> {
                                                                                       emailForFind;
                                                                                 },
                                                                               );
-
+                                                                              print(
+                                                                                'statusController: ${statusController.text}',
+                                                                              );
                                                                               final AccountStock
                                                                               newAccount = AccountStock(
                                                                                 id:
@@ -202,7 +208,7 @@ class _StocksPageState extends State<StocksPage> {
                                                                                 password:
                                                                                     passwordController.text,
                                                                                 status:
-                                                                                    'available',
+                                                                                    statusController.text,
                                                                                 createdAt:
                                                                                     DateTime.now().toString(),
                                                                                 category:
@@ -212,15 +218,11 @@ class _StocksPageState extends State<StocksPage> {
                                                                                       metadataController.text,
                                                                                 },
                                                                               );
-                                                                              final accountStock =
-                                                                                  controller.accountStocks;
 
                                                                               final int?
                                                                               statusCode = await controller.updateAccountStock(
                                                                                 newAccount,
                                                                               );
-                                                                              final accountStockAfterAdd =
-                                                                                  controller.accountStocks;
 
                                                                               if (context.mounted) {
                                                                                 Navigator.pop(
@@ -338,6 +340,9 @@ class _StocksPageState extends State<StocksPage> {
                                                                         setBottomState(() {
                                                                           dropdownValue =
                                                                               value;
+                                                                          print(
+                                                                            stockValue[indexEmail].status,
+                                                                          );
 
                                                                           emailController.text =
                                                                               stockValue[indexEmail].email;
@@ -345,6 +350,10 @@ class _StocksPageState extends State<StocksPage> {
                                                                               stockValue[indexEmail].password;
                                                                           metadataController.text =
                                                                               stockValue[indexEmail].metadata['2fa'];
+                                                                          statusController.text =
+                                                                              stockValue[indexEmail].status;
+                                                                          statusValue =
+                                                                              stockValue[indexEmail].status;
                                                                         });
                                                                       }
                                                                     },
@@ -492,6 +501,65 @@ class _StocksPageState extends State<StocksPage> {
                                                                               '2fa',
                                                                         ),
                                                                       ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            30,
+                                                                      ),
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(
+                                                                                4,
+                                                                              ),
+                                                                          border: Border.all(
+                                                                            width:
+                                                                                1,
+                                                                            color: Colors.black.withValues(
+                                                                              alpha:
+                                                                                  0.5,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        child: DropdownButton<
+                                                                          String
+                                                                        >(
+                                                                          hint: Text(
+                                                                            'Status',
+                                                                          ),
+                                                                          padding: EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                8,
+                                                                          ),
+                                                                          underline:
+                                                                              SizedBox(),
+                                                                          isExpanded:
+                                                                              true,
+                                                                          value:
+                                                                              statusValue,
+                                                                          items: [
+                                                                            ...status.map((
+                                                                              e,
+                                                                            ) {
+                                                                              return DropdownMenuItem(
+                                                                                value:
+                                                                                    e,
+                                                                                child: Text(
+                                                                                  e,
+                                                                                ),
+                                                                              );
+                                                                            }),
+                                                                          ],
+                                                                          onChanged: (
+                                                                            value,
+                                                                          ) {
+                                                                            setBottomState(() {
+                                                                              statusController.text = value!;
+                                                                              statusValue =
+                                                                                  value;
+                                                                            });
+                                                                          },
+                                                                        ),
+                                                                      ),
                                                                     ],
                                                                   ),
                                                                 ),
@@ -518,6 +586,7 @@ class _StocksPageState extends State<StocksPage> {
                                                   emailController.clear();
                                                   passwordController.clear();
                                                   metadataController.clear();
+
                                                   showModalBottomSheet(
                                                     isScrollControlled: true,
                                                     context: context,
