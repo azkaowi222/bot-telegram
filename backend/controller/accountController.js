@@ -47,13 +47,6 @@ export const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
     const { productId, email, password, status, metadata } = req.body;
-    console.log({
-      productId,
-      email,
-      password,
-      status,
-      metadata,
-    });
     const account = await Account.findById(id);
     const isHasOrder = account.get("order");
     if (isHasOrder) {

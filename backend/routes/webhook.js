@@ -36,18 +36,18 @@ router.post("/webhook/callback", async (req, res) => {
     await Order.findByIdAndUpdate(
       data.order_id,
       { status: "paid" },
-      { session }
+      { session },
     );
 
     await Payment.findOneAndUpdate(
       { order: data.order_id },
       { status: "paid" },
-      { session }
+      { session },
     );
 
     // 5. Ambil semua item dari OrderItem
     const items = await OrderItem.find({ order: data.order_id }).session(
-      session
+      session,
     );
 
     const deliveredAccounts = [];
@@ -97,13 +97,13 @@ Pesanan Anda sudah diproses.
 
 📦 *Informasi Akun*:
 
-${accountToSend.toString().replaceAll(",", "").trim()}
+${accountToSend.join("")}
 
 Terimakasih sudah order di MannStore 😊.
 Semoga awet dan lancar. Ditunggu order selanjutnya...`,
           parse_mode: "Markdown",
         }),
-      }
+      },
     );
 
     await session.commitTransaction();
