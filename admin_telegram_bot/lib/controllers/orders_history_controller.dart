@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:admin_telegram_bot/models/order.dart';
 import 'package:admin_telegram_bot/models/order_history.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +36,23 @@ class OrdersHistoryController extends ChangeNotifier {
     } finally {
       loading = false;
       notifyListeners();
+    }
+  }
+
+  Future<Order?> getOrdersHistoryById({required String id}) async {
+    final OrdersHistory order = ordersHistory.firstWhere((e) {
+      return e.id == id;
+    });
+    try {
+      final Uri uri = Uri.parse('$backendUrl/api/order/${order.id}');
+      final response = await http.get(
+        uri,
+        headers: {'ngrok-skip-browser-warning': '1'},
+      );
+      final data = jsonDecode(response.body);
+      return Order.fromjson(data['data']);
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

@@ -134,6 +134,7 @@ export const getAllOrders = async (req, res) => {
         .populate("product")
         .lean();
       fullInfoOrders.push({
+        id: order._id,
         soldBy: order.user.username ?? order.user.telegramId,
         product: product.nameSnapshot,
         status: order.status,
@@ -157,10 +158,21 @@ export const getAllOrders = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
-    const orders = await Order.findById(id).lean();
-    return res.status(201).json({
+    const orders = await Order.findById(id).populate("user").lean();
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+    const products = await OrderItem.find({
+      order: orders._id,
+    }).lean();
+    return res.status(200).json({
       status: "success",
-      data: orders,
+      data: {
+        ...orders,
+        items: products,
+      },
     });
   } catch (error) {
     return res.status(500).json({

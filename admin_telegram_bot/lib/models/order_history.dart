@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class OrdersHistory {
+  final String id;
   final String soldBy;
   final String product;
   final String status;
@@ -10,6 +11,7 @@ class OrdersHistory {
 
 
   const OrdersHistory({
+    required this.id,
     required this.soldBy,
     required this.product,
     required this.status,
@@ -20,6 +22,7 @@ class OrdersHistory {
 
   factory OrdersHistory.fromJson(Map<String, dynamic> json) {
     return OrdersHistory(
+      id: json['id'],
       soldBy: json['soldBy'],
       product: json['product'],
       status: json['status'],
