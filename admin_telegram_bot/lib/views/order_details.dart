@@ -7,6 +7,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
     String _status;
     int _colorStatus;
     switch (order!.status) {
@@ -43,12 +44,17 @@ class OrderDetailsScreen extends StatelessWidget {
                         onTap: () => Navigator.pop(context),
                       ),
                       SizedBox(width: 10),
-                      Text(
-                        'Order ${order?.id}',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      SizedBox(
+                        width: deviceWidth * 0.6,
+                        child: Text(
+                          'Order ${order?.id}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                     ],
