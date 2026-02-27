@@ -21,7 +21,7 @@ export const addAccount = async (req, res) => {
     const { productId, email, password, metadata } = req.body;
     const account = await Account.create({
       product: productId,
-      email,
+      email: email.toLowerCase(),
       password,
       metadata,
     });
