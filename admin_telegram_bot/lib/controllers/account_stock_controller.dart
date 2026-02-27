@@ -104,9 +104,17 @@ class AccountStockController extends ChangeNotifier {
         Uri.parse('$backendUrl/api/account/${account.id}'),
       );
       final int statusCode = response.statusCode;
+      final indexOfDelete = _accountsStocks.indexWhere((e) {
+        return e.id == account.id;
+      });
+      if (indexOfDelete != -1) {
+        _accountsStocks.removeAt(indexOfDelete);
+      }
       return statusCode;
     } catch (e) {
       print('Error bro ${e.toString()}');
+    } finally {
+      notifyListeners();
     }
   }
 }

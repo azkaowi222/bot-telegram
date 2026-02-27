@@ -84,6 +84,7 @@ class _StocksPageState extends State<StocksPage> {
                       final stockKey = stocks[index].keys.single;
                       final List<AccountStock> stockValue =
                           stocks[index][stockKey];
+                      stockValue.sort((a, b) => a.email.compareTo(b.email));
                       return Container(
                         padding: EdgeInsets.all(8),
                         height: 300,
@@ -342,6 +343,11 @@ class _StocksPageState extends State<StocksPage> {
                                                                                                 account,
                                                                                               );
                                                                                               if (context.mounted) {
+                                                                                                Navigator.of(
+                                                                                                  context,
+                                                                                                  rootNavigator:
+                                                                                                      true,
+                                                                                                ).pop();
                                                                                                 Navigator.pop(
                                                                                                   context,
                                                                                                 );

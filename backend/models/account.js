@@ -7,7 +7,7 @@ const accountSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     metadata: { type: Object }, // tambahan info (login URL, token, dsb)
     status: {
@@ -22,7 +22,7 @@ const accountSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Account", accountSchema);
