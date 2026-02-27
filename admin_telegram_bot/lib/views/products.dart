@@ -70,7 +70,7 @@ class _ProductsState extends State<Products> {
                           controller: messageController,
                           minLines: 4,
                           maxLines: null,
-                          textInputAction: TextInputAction.done,
+                          textInputAction: TextInputAction.newline,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 8,

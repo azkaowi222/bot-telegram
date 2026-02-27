@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:admin_telegram_bot/controllers/orders_history_controller.dart';
 import 'package:admin_telegram_bot/models/account_stock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -81,15 +82,11 @@ class AccountStockController extends ChangeNotifier {
       }
       final json = jsonDecode(response.body);
       final data = json['data'];
-      _accountsStocks.forEach((element) {
-        print(element.email);
-      });
       final emailIndex = _accountsStocks.indexWhere((
         AccountStock accountIndex,
       ) {
         return accountIndex.id == account.id;
       });
-      print('emailIndex: $emailIndex');
       _accountsStocks.replaceRange(emailIndex, emailIndex + 1, [
         AccountStock.fromJson(data),
       ]);
@@ -98,6 +95,18 @@ class AccountStockController extends ChangeNotifier {
       print('Error exception ${e.toString()}');
     } finally {
       notifyListeners();
+    }
+  }
+
+  Future<int?> deleteAccount(AccountStock account) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$backendUrl/api/account/${account.id}'),
+      );
+      final int statusCode = response.statusCode;
+      return statusCode;
+    } catch (e) {
+      print('Error bro ${e.toString()}');
     }
   }
 }

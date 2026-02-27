@@ -24,6 +24,7 @@ import {
   getAllAccounts,
   addAccount,
   updateAccount,
+  deleteAccount,
 } from "../controller/accountController.js";
 
 const router = express.Router();
@@ -51,6 +52,7 @@ router.get("/order/history/:telegramId", getOrderHistory);
 router.get("/accounts", getAllAccounts);
 router.post("/account/add", addAccount);
 router.patch("/account/edit/:id", updateAccount);
+router.delete("/account/:id", deleteAccount);
 
 //broadcast
 router.post("/broadcast", sendBroadcast);

@@ -83,3 +83,23 @@ export const updateAccount = async (req, res) => {
     });
   }
 };
+
+export const deleteAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    if (!id) {
+      throw Error("Required Id");
+    }
+    await Account.findByIdAndDelete(id);
+    return res.status(200).json({
+      status: "success",
+      message: "deleted succesfully",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};

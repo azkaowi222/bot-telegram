@@ -69,7 +69,7 @@ class ProductController extends ChangeNotifier {
           _products.add(ProductModel.fromJson(data));
           _masterData.add(ProductModel.fromJson(data));
         }
-       
+
         isLoading = false;
         notifyListeners();
         // print("Data Berhasil: $data");
@@ -156,7 +156,6 @@ class ProductController extends ChangeNotifier {
         products.where((product) {
           return product.name == name;
         }).toList();
-    debugPrint(product[0].name);
     final response = await http.delete(
       Uri.parse('$backendUrl/api/product'),
       headers: {'content-type': 'application/json'},
@@ -176,8 +175,6 @@ class ProductController extends ChangeNotifier {
   void handleSearch(String value) {
     // 1. Jika kosong, reset filter
     if (value.isEmpty) {
-      print(_masterData.length); // Sekarang aman, tetap 6
-
       // PERBAIKAN: Gunakan List.from untuk menduplikat data
       _products = List.from(_masterData);
 
@@ -219,12 +216,4 @@ class ProductController extends ChangeNotifier {
       return 'failed to send broadcast';
     }
   }
-
-  // Future<void> getAllCategories() async{
-  //   try {
-  //     final response = await http.get()
-  //   } catch(e) {
-  //     print('Error exception: ${e.toString()}');
-  //   }
-  // }
 }

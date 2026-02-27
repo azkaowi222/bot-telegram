@@ -77,6 +77,7 @@ class _StocksPageState extends State<StocksPage> {
               controller.isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
+                    // physics: NeverScrollableScrollPhysics(),
                     itemCount: productController.products.length,
                     itemBuilder: (context, index) {
                       final account = productController.products[index];
@@ -85,7 +86,8 @@ class _StocksPageState extends State<StocksPage> {
                           stocks[index][stockKey];
                       return Container(
                         padding: EdgeInsets.all(8),
-                        margin: EdgeInsets.only(bottom: 30),
+                        height: 300,
+                        margin: EdgeInsets.only(bottom: 60),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
@@ -93,94 +95,115 @@ class _StocksPageState extends State<StocksPage> {
                             color: Colors.black.withValues(alpha: 0.2),
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: ListView(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(account.name),
                                           Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  dropdownValue = null;
-                                                  keyboarHeight = 0;
-                                                  _formKey.currentState
-                                                      ?.reset();
-                                                  emailController.clear();
-                                                  passwordController.clear();
-                                                  metadataController.clear();
-                                                  statusValue = null;
-                                                  showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return StatefulBuilder(
-                                                        builder: (
-                                                          context,
-                                                          setBottomState,
-                                                        ) {
-                                                          return Container(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                  left: 20,
-                                                                  right: 20,
-                                                                  top: 12,
-                                                                  bottom:
-                                                                      keyboarHeight +
-                                                                      50,
-                                                                ),
-                                                            width:
-                                                                double.infinity,
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                Row(
+                                              Text(account.name),
+                                              Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      dropdownValue = null;
+                                                      keyboarHeight = 0;
+                                                      _formKey.currentState
+                                                          ?.reset();
+                                                      emailController.clear();
+                                                      passwordController
+                                                          .clear();
+                                                      metadataController
+                                                          .clear();
+                                                      statusValue = null;
+                                                      showModalBottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return StatefulBuilder(
+                                                            builder: (
+                                                              context,
+                                                              setBottomState,
+                                                            ) {
+                                                              return Container(
+                                                                padding:
+                                                                    EdgeInsets.only(
+                                                                      left: 20,
+                                                                      right: 20,
+                                                                      top: 12,
+                                                                      bottom:
+                                                                          keyboarHeight +
+                                                                          50,
+                                                                    ),
+                                                                width:
+                                                                    double
+                                                                        .infinity,
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
                                                                   children: [
-                                                                    GestureDetector(
-                                                                      onTap:
-                                                                          () => Navigator.pop(
-                                                                            context,
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        SizedBox(
+                                                                          child: Column(
+                                                                            children: [
+                                                                              Row(
+                                                                                children: [
+                                                                                  GestureDetector(
+                                                                                    onTap:
+                                                                                        () => Navigator.pop(
+                                                                                          context,
+                                                                                        ),
+                                                                                    child: Icon(
+                                                                                      Icons.arrow_back_rounded,
+                                                                                    ),
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    width:
+                                                                                        5,
+                                                                                  ),
+                                                                                  Container(
+                                                                                    width:
+                                                                                        deviceWidth *
+                                                                                        0.5,
+                                                                                    margin: EdgeInsets.only(
+                                                                                      top:
+                                                                                          3,
+                                                                                    ),
+                                                                                    child: Text(
+                                                                                      'Edit Stock ${account.name}',
+
+                                                                                      overflow:
+                                                                                          TextOverflow.ellipsis,
+                                                                                      style: TextStyle(
+                                                                                        fontSize:
+                                                                                            16,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
                                                                           ),
-                                                                      child: Icon(
-                                                                        Icons
-                                                                            .arrow_back_rounded,
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 5,
-                                                                    ),
-                                                                    Container(
-                                                                      margin:
-                                                                          EdgeInsets.only(
-                                                                            top:
-                                                                                3,
-                                                                          ),
-                                                                      child: Text(
-                                                                        'Edit stock',
-                                                                        style: TextStyle(
-                                                                          fontSize:
-                                                                              16,
                                                                         ),
-                                                                      ),
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Align(
-                                                                        alignment:
-                                                                            Alignment.centerRight,
-                                                                        child: GestureDetector(
+                                                                        GestureDetector(
                                                                           onTap: () async {
                                                                             if (_formKey.currentState!.validate()) {
                                                                               final AccountStock
@@ -192,9 +215,7 @@ class _StocksPageState extends State<StocksPage> {
                                                                                       emailForFind;
                                                                                 },
                                                                               );
-                                                                              print(
-                                                                                'statusController: ${statusController.text}',
-                                                                              );
+
                                                                               final AccountStock
                                                                               newAccount = AccountStock(
                                                                                 id:
@@ -232,7 +253,16 @@ class _StocksPageState extends State<StocksPage> {
                                                                                   context,
                                                                                 ).showSnackBar(
                                                                                   SnackBar(
+                                                                                    backgroundColor:
+                                                                                        statusCode ==
+                                                                                                200
+                                                                                            ? Colors.green[300]
+                                                                                            : Colors.red[600],
                                                                                     content: Text(
+                                                                                      style: TextStyle(
+                                                                                        color:
+                                                                                            Colors.white,
+                                                                                      ),
                                                                                       statusCode ==
                                                                                               200
                                                                                           ? 'Stock Edited succesfully'
@@ -243,721 +273,881 @@ class _StocksPageState extends State<StocksPage> {
                                                                               }
                                                                             }
                                                                           },
-                                                                          child: Container(
-                                                                            padding: EdgeInsets.all(
-                                                                              8,
-                                                                            ),
-                                                                            decoration: BoxDecoration(
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                8,
+                                                                          child: Row(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            children: [
+                                                                              GestureDetector(
+                                                                                onTap: () {
+                                                                                  final AccountStock account = stockValue.firstWhere(
+                                                                                    (
+                                                                                      e,
+                                                                                    ) {
+                                                                                      return emailController.text ==
+                                                                                          e.email;
+                                                                                    },
+                                                                                  );
+                                                                                  showDialog(
+                                                                                    context:
+                                                                                        context,
+                                                                                    builder: (
+                                                                                      _,
+                                                                                    ) {
+                                                                                      return AlertDialog(
+                                                                                        shape: OutlineInputBorder(
+                                                                                          borderRadius: BorderRadius.circular(
+                                                                                            8,
+                                                                                          ),
+                                                                                          borderSide:
+                                                                                              BorderSide.none,
+                                                                                        ),
+                                                                                        actions: [
+                                                                                          GestureDetector(
+                                                                                            onTap:
+                                                                                                () => Navigator.pop(
+                                                                                                  context,
+                                                                                                ),
+                                                                                            child: Container(
+                                                                                              padding: EdgeInsets.all(
+                                                                                                8,
+                                                                                              ),
+
+                                                                                              decoration: BoxDecoration(
+                                                                                                borderRadius: BorderRadius.all(
+                                                                                                  Radius.circular(
+                                                                                                    8,
+                                                                                                  ),
+                                                                                                ),
+                                                                                                color: Colors.black.withValues(
+                                                                                                  alpha:
+                                                                                                      0.2,
+                                                                                                ),
+                                                                                              ),
+                                                                                              child: Text(
+                                                                                                'Cancel',
+                                                                                                style: TextStyle(
+                                                                                                  color: Colors.black.withValues(
+                                                                                                    alpha:
+                                                                                                        0.6,
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          GestureDetector(
+                                                                                            onTap: () async {
+                                                                                              final int? statusCode = await controller.deleteAccount(
+                                                                                                account,
+                                                                                              );
+                                                                                              if (context.mounted) {
+                                                                                                Navigator.pop(
+                                                                                                  context,
+                                                                                                );
+
+                                                                                                ScaffoldMessenger.of(
+                                                                                                  context,
+                                                                                                ).showSnackBar(
+                                                                                                  SnackBar(
+                                                                                                    content: Text(
+                                                                                                      statusCode ==
+                                                                                                              200
+                                                                                                          ? 'Delete successfull'
+                                                                                                          : 'Failed to Delete',
+                                                                                                    ),
+                                                                                                    duration: Duration(
+                                                                                                      seconds:
+                                                                                                          3,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                );
+                                                                                              }
+                                                                                            },
+                                                                                            child: Container(
+                                                                                              padding: EdgeInsets.all(
+                                                                                                8,
+                                                                                              ),
+
+                                                                                              decoration: BoxDecoration(
+                                                                                                borderRadius: BorderRadius.all(
+                                                                                                  Radius.circular(
+                                                                                                    8,
+                                                                                                  ),
+                                                                                                ),
+                                                                                                color: Colors.red.withValues(
+                                                                                                  alpha:
+                                                                                                      0.7,
+                                                                                                ),
+                                                                                              ),
+                                                                                              child: Text(
+                                                                                                'Delete',
+                                                                                                style: TextStyle(
+                                                                                                  color: Colors.black.withValues(
+                                                                                                    alpha:
+                                                                                                        0.6,
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                        content: Text(
+                                                                                          '${account.email} will delete permanently, you sure?',
+                                                                                        ),
+                                                                                      );
+                                                                                    },
+                                                                                  );
+                                                                                },
+                                                                                child: Container(
+                                                                                  padding: EdgeInsets.all(
+                                                                                    8,
+                                                                                  ),
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(
+                                                                                      8,
+                                                                                    ),
+                                                                                  ),
+                                                                                  margin: EdgeInsets.only(
+                                                                                    top:
+                                                                                        2,
+                                                                                  ),
+                                                                                  child: Icon(
+                                                                                    Icons.delete,
+                                                                                    color:
+                                                                                        Colors.red[600],
+                                                                                  ),
+                                                                                ),
                                                                               ),
-                                                                              color:
-                                                                                  Colors.blue.shade300,
-                                                                            ),
-                                                                            margin: EdgeInsets.only(
-                                                                              top:
-                                                                                  2,
-                                                                            ),
-                                                                            child: Text(
-                                                                              'Save',
-                                                                              style: TextStyle(
-                                                                                fontSize:
-                                                                                    14,
+
+                                                                              Container(
+                                                                                padding: EdgeInsets.all(
+                                                                                  8,
+                                                                                ),
+                                                                                decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                    8,
+                                                                                  ),
+                                                                                  color:
+                                                                                      Colors.blue.shade300,
+                                                                                ),
+                                                                                margin: EdgeInsets.only(
+                                                                                  top:
+                                                                                      2,
+                                                                                ),
+                                                                                child: Text(
+                                                                                  'Save',
+                                                                                  style: TextStyle(
+                                                                                    fontSize:
+                                                                                        14,
+                                                                                  ),
+                                                                                ),
                                                                               ),
-                                                                            ),
+                                                                            ],
                                                                           ),
                                                                         ),
-                                                                      ),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 30,
-                                                                ),
-                                                                Container(
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          4,
-                                                                        ),
-                                                                    border: Border.all(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black
-                                                                          .withValues(
+                                                                    SizedBox(
+                                                                      height:
+                                                                          30,
+                                                                    ),
+                                                                    Container(
+                                                                      decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                              4,
+                                                                            ),
+                                                                        border: Border.all(
+                                                                          width:
+                                                                              1,
+                                                                          color: Colors.black.withValues(
                                                                             alpha:
                                                                                 0.5,
                                                                           ),
-                                                                    ),
-                                                                  ),
-                                                                  child: DropdownButton<
-                                                                    String
-                                                                  >(
-                                                                    hint: Text(
-                                                                      'Select account',
-                                                                    ),
-                                                                    value:
-                                                                        dropdownValue,
-                                                                    padding:
-                                                                        EdgeInsets.symmetric(
+                                                                        ),
+                                                                      ),
+                                                                      child: DropdownButton<
+                                                                        String
+                                                                      >(
+                                                                        hint: Text(
+                                                                          'Select account',
+                                                                        ),
+                                                                        value:
+                                                                            dropdownValue,
+                                                                        padding: EdgeInsets.symmetric(
                                                                           horizontal:
                                                                               8,
                                                                         ),
-                                                                    isExpanded:
-                                                                        true,
-                                                                    underline:
-                                                                        SizedBox(),
+                                                                        isExpanded:
+                                                                            true,
+                                                                        underline:
+                                                                            SizedBox(),
 
-                                                                    items: [
-                                                                      ...stockValue.map((
-                                                                        AccountStock
-                                                                        account,
-                                                                      ) {
-                                                                        return DropdownMenuItem(
-                                                                          value:
-                                                                              account.email,
-                                                                          child: Text(
-                                                                            account.email,
-                                                                          ),
-                                                                        );
-                                                                      }),
-                                                                    ],
-
-                                                                    onChanged: (
-                                                                      value,
-                                                                    ) {
-                                                                      final indexEmail = stockValue.indexWhere((
-                                                                        AccountStock
-                                                                        account,
-                                                                      ) {
-                                                                        return account.email ==
-                                                                            value;
-                                                                      });
-                                                                      emailForFind =
-                                                                          value;
-                                                                      if (indexEmail !=
-                                                                          -1) {
-                                                                        setBottomState(() {
-                                                                          dropdownValue =
-                                                                              value;
-                                                                          print(
-                                                                            stockValue[indexEmail].status,
-                                                                          );
-
-                                                                          emailController.text =
-                                                                              stockValue[indexEmail].email;
-                                                                          passwordController.text =
-                                                                              stockValue[indexEmail].password;
-                                                                          metadataController.text =
-                                                                              stockValue[indexEmail].metadata['2fa'];
-                                                                          statusController.text =
-                                                                              stockValue[indexEmail].status;
-                                                                          statusValue =
-                                                                              stockValue[indexEmail].status;
-                                                                        });
-                                                                      }
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 30,
-                                                                ),
-
-                                                                Form(
-                                                                  key: _formKey,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      TextFormField(
-                                                                        onTap: () {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    220,
-                                                                          );
-                                                                        },
-                                                                        onFieldSubmitted: (
-                                                                          value,
-                                                                        ) {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    0,
-                                                                          );
-                                                                        },
-                                                                        controller:
-                                                                            emailController,
-                                                                        autovalidateMode:
-                                                                            AutovalidateMode.onUserInteraction,
-                                                                        validator: (
-                                                                          value,
-                                                                        ) {
-                                                                          if (value!
-                                                                              .isEmpty) {
-                                                                            return 'Field required';
-                                                                          }
-                                                                          return null;
-                                                                        },
-
-                                                                        decoration: InputDecoration(
-                                                                          contentPadding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          border:
-                                                                              OutlineInputBorder(),
-                                                                          labelText:
-                                                                              'Username/email',
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            30,
-                                                                      ),
-                                                                      TextFormField(
-                                                                        onTap: () {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    220,
-                                                                          );
-                                                                        },
-                                                                        onFieldSubmitted: (
-                                                                          value,
-                                                                        ) {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    0,
-                                                                          );
-                                                                        },
-                                                                        controller:
-                                                                            passwordController,
-                                                                        autovalidateMode:
-                                                                            AutovalidateMode.onUserInteraction,
-                                                                        validator: (
-                                                                          value,
-                                                                        ) {
-                                                                          if (value!
-                                                                              .isEmpty) {
-                                                                            return 'Field required';
-                                                                          }
-                                                                          return null;
-                                                                        },
-
-                                                                        decoration: InputDecoration(
-                                                                          contentPadding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          border:
-                                                                              OutlineInputBorder(),
-                                                                          labelText:
-                                                                              'Password',
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            30,
-                                                                      ),
-                                                                      TextFormField(
-                                                                        onTap: () {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    220,
-                                                                          );
-                                                                        },
-                                                                        onFieldSubmitted: (
-                                                                          value,
-                                                                        ) {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    0,
-                                                                          );
-                                                                        },
-                                                                        controller:
-                                                                            metadataController,
-                                                                        autovalidateMode:
-                                                                            AutovalidateMode.onUserInteraction,
-                                                                        validator: (
-                                                                          value,
-                                                                        ) {
-                                                                          if (value!
-                                                                              .isEmpty) {
-                                                                            return 'Field required';
-                                                                          }
-                                                                          return null;
-                                                                        },
-
-                                                                        decoration: InputDecoration(
-                                                                          contentPadding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          border:
-                                                                              OutlineInputBorder(),
-                                                                          labelText:
-                                                                              '2fa',
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            30,
-                                                                      ),
-                                                                      Container(
-                                                                        decoration: BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(
-                                                                                4,
-                                                                              ),
-                                                                          border: Border.all(
-                                                                            width:
-                                                                                1,
-                                                                            color: Colors.black.withValues(
-                                                                              alpha:
-                                                                                  0.5,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        child: DropdownButton<
-                                                                          String
-                                                                        >(
-                                                                          hint: Text(
-                                                                            'Status',
-                                                                          ),
-                                                                          padding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          underline:
-                                                                              SizedBox(),
-                                                                          isExpanded:
-                                                                              true,
-                                                                          value:
-                                                                              statusValue,
-                                                                          items: [
-                                                                            ...status.map((
-                                                                              e,
-                                                                            ) {
-                                                                              return DropdownMenuItem(
-                                                                                value:
-                                                                                    e,
-                                                                                child: Text(
-                                                                                  e,
-                                                                                ),
-                                                                              );
-                                                                            }),
-                                                                          ],
-                                                                          onChanged: (
-                                                                            value,
+                                                                        items: [
+                                                                          ...stockValue.map((
+                                                                            AccountStock
+                                                                            account,
                                                                           ) {
-                                                                            setBottomState(() {
-                                                                              statusController.text = value!;
-                                                                              statusValue =
-                                                                                  value;
-                                                                            });
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: Icon(
-                                                  Icons.edit_square,
-                                                  color: Colors.blue.shade400,
-                                                  semanticLabel: 'Edit stock',
-                                                ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  keyboarHeight = 0;
-                                                  _formKey.currentState
-                                                      ?.reset();
-                                                  emailController.clear();
-                                                  passwordController.clear();
-                                                  metadataController.clear();
+                                                                            return DropdownMenuItem(
+                                                                              value:
+                                                                                  account.email,
+                                                                              child: Text(
+                                                                                account.email,
+                                                                              ),
+                                                                            );
+                                                                          }),
+                                                                        ],
 
-                                                  showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return StatefulBuilder(
-                                                        builder: (
-                                                          context,
-                                                          setBottomState,
-                                                        ) {
-                                                          return Container(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                  left: 20,
-                                                                  right: 20,
-                                                                  top: 12,
-                                                                  bottom:
-                                                                      keyboarHeight +
-                                                                      50,
-                                                                ),
-                                                            width:
-                                                                double.infinity,
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    GestureDetector(
-                                                                      onTap:
-                                                                          () => Navigator.pop(
-                                                                            context,
-                                                                          ),
-                                                                      child: Icon(
-                                                                        Icons
-                                                                            .arrow_back_rounded,
+                                                                        onChanged: (
+                                                                          value,
+                                                                        ) {
+                                                                          final indexEmail = stockValue.indexWhere((
+                                                                            AccountStock
+                                                                            account,
+                                                                          ) {
+                                                                            return account.email ==
+                                                                                value;
+                                                                          });
+                                                                          emailForFind =
+                                                                              value;
+                                                                          if (indexEmail !=
+                                                                              -1) {
+                                                                            setBottomState(() {
+                                                                              dropdownValue =
+                                                                                  value;
+                                                                              print(
+                                                                                stockValue[indexEmail].status,
+                                                                              );
+
+                                                                              emailController.text = stockValue[indexEmail].email;
+                                                                              passwordController.text = stockValue[indexEmail].password;
+                                                                              metadataController.text = stockValue[indexEmail].metadata['2fa'];
+                                                                              statusController.text = stockValue[indexEmail].status;
+                                                                              statusValue =
+                                                                                  stockValue[indexEmail].status;
+                                                                            });
+                                                                          }
+                                                                        },
                                                                       ),
                                                                     ),
                                                                     SizedBox(
-                                                                      width: 5,
+                                                                      height:
+                                                                          30,
                                                                     ),
-                                                                    Container(
-                                                                      margin:
-                                                                          EdgeInsets.only(
-                                                                            top:
-                                                                                3,
-                                                                          ),
-                                                                      child: Text(
-                                                                        'Add stock',
-                                                                        style: TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Align(
-                                                                        alignment:
-                                                                            Alignment.centerRight,
-                                                                        child: GestureDetector(
-                                                                          onTap: () async {
-                                                                            if (_formKey.currentState!.validate()) {
-                                                                              final AccountStock
-                                                                              newAccount = AccountStock(
-                                                                                product: {
-                                                                                  'id':
-                                                                                      account.id,
-                                                                                },
-                                                                                email:
-                                                                                    emailController.text,
-                                                                                password:
-                                                                                    passwordController.text,
-                                                                                status:
-                                                                                    'available',
-                                                                                createdAt:
-                                                                                    DateTime.now().toString(),
-                                                                                category:
-                                                                                    account.category,
-                                                                                metadata: {
-                                                                                  '2fa':
-                                                                                      metadataController.text,
-                                                                                },
-                                                                              );
-                                                                              final accountStock =
-                                                                                  controller.accountStocks.length;
 
-                                                                              await controller.addAccountStock(
-                                                                                newAccount,
+                                                                    Form(
+                                                                      key:
+                                                                          _formKey,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          TextFormField(
+                                                                            onTap: () {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        220,
                                                                               );
-                                                                              final accountStockAfterAdd =
-                                                                                  controller.accountStocks.length;
-                                                                              if (context.mounted) {
-                                                                                Navigator.pop(
-                                                                                  context,
-                                                                                );
-                                                                                ScaffoldMessenger.of(
-                                                                                  context,
-                                                                                ).showSnackBar(
-                                                                                  SnackBar(
-                                                                                    content: Text(
-                                                                                      accountStock <
-                                                                                              accountStockAfterAdd
-                                                                                          ? 'Stock added succesfully'
-                                                                                          : 'Failed add stcok',
-                                                                                    ),
-                                                                                  ),
-                                                                                );
+                                                                            },
+                                                                            onFieldSubmitted: (
+                                                                              value,
+                                                                            ) {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        0,
+                                                                              );
+                                                                            },
+                                                                            controller:
+                                                                                emailController,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
                                                                               }
-                                                                            }
-                                                                          },
-                                                                          child: Container(
-                                                                            padding: EdgeInsets.all(
-                                                                              8,
+                                                                              return null;
+                                                                            },
+
+                                                                            decoration: InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                              labelText:
+                                                                                  'Username/email',
                                                                             ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                30,
+                                                                          ),
+                                                                          TextFormField(
+                                                                            onTap: () {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        220,
+                                                                              );
+                                                                            },
+                                                                            onFieldSubmitted: (
+                                                                              value,
+                                                                            ) {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        0,
+                                                                              );
+                                                                            },
+                                                                            controller:
+                                                                                passwordController,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
+                                                                              }
+                                                                              return null;
+                                                                            },
+
+                                                                            decoration: InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                              labelText:
+                                                                                  'Password',
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                30,
+                                                                          ),
+                                                                          TextFormField(
+                                                                            onTap: () {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        220,
+                                                                              );
+                                                                            },
+                                                                            onFieldSubmitted: (
+                                                                              value,
+                                                                            ) {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        0,
+                                                                              );
+                                                                            },
+                                                                            controller:
+                                                                                metadataController,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
+                                                                              }
+                                                                              return null;
+                                                                            },
+
+                                                                            decoration: InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                              labelText:
+                                                                                  '2fa',
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                30,
+                                                                          ),
+                                                                          Container(
                                                                             decoration: BoxDecoration(
                                                                               borderRadius: BorderRadius.circular(
-                                                                                8,
+                                                                                4,
                                                                               ),
-                                                                              color:
-                                                                                  Colors.blue.shade300,
-                                                                            ),
-                                                                            margin: EdgeInsets.only(
-                                                                              top:
-                                                                                  2,
-                                                                            ),
-                                                                            child: Text(
-                                                                              'Save',
-                                                                              style: TextStyle(
-                                                                                fontSize:
-                                                                                    14,
+                                                                              border: Border.all(
+                                                                                width:
+                                                                                    1,
+                                                                                color: Colors.black.withValues(
+                                                                                  alpha:
+                                                                                      0.5,
+                                                                                ),
                                                                               ),
+                                                                            ),
+                                                                            child: DropdownButton<
+                                                                              String
+                                                                            >(
+                                                                              hint: Text(
+                                                                                'Status',
+                                                                              ),
+                                                                              padding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              underline:
+                                                                                  SizedBox(),
+                                                                              isExpanded:
+                                                                                  true,
+                                                                              value:
+                                                                                  statusValue,
+                                                                              items: [
+                                                                                ...status.map(
+                                                                                  (
+                                                                                    e,
+                                                                                  ) {
+                                                                                    return DropdownMenuItem(
+                                                                                      value:
+                                                                                          e,
+                                                                                      child: Text(
+                                                                                        e,
+                                                                                      ),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                              onChanged: (
+                                                                                value,
+                                                                              ) {
+                                                                                setBottomState(
+                                                                                  () {
+                                                                                    statusController.text = value!;
+                                                                                    statusValue =
+                                                                                        value;
+                                                                                  },
+                                                                                );
+                                                                              },
                                                                             ),
                                                                           ),
-                                                                        ),
+                                                                        ],
                                                                       ),
                                                                     ),
                                                                   ],
                                                                 ),
-                                                                SizedBox(
-                                                                  height: 30,
-                                                                ),
-                                                                Form(
-                                                                  key: _formKey,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      TextFormField(
-                                                                        onTap: () {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    220,
-                                                                          );
-                                                                        },
-                                                                        onFieldSubmitted: (
-                                                                          value,
-                                                                        ) {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    0,
-                                                                          );
-                                                                        },
-                                                                        controller:
-                                                                            emailController,
-                                                                        autovalidateMode:
-                                                                            AutovalidateMode.onUserInteraction,
-                                                                        validator: (
-                                                                          value,
-                                                                        ) {
-                                                                          if (value!
-                                                                              .isEmpty) {
-                                                                            return 'Field required';
-                                                                          }
-                                                                          return null;
-                                                                        },
-
-                                                                        decoration: InputDecoration(
-                                                                          contentPadding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          border:
-                                                                              OutlineInputBorder(),
-                                                                          labelText:
-                                                                              'Username/email',
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            30,
-                                                                      ),
-                                                                      TextFormField(
-                                                                        onTap: () {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    220,
-                                                                          );
-                                                                        },
-                                                                        onFieldSubmitted: (
-                                                                          value,
-                                                                        ) {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    0,
-                                                                          );
-                                                                        },
-                                                                        controller:
-                                                                            passwordController,
-                                                                        autovalidateMode:
-                                                                            AutovalidateMode.onUserInteraction,
-                                                                        validator: (
-                                                                          value,
-                                                                        ) {
-                                                                          if (value!
-                                                                              .isEmpty) {
-                                                                            return 'Field required';
-                                                                          }
-                                                                          return null;
-                                                                        },
-
-                                                                        decoration: InputDecoration(
-                                                                          contentPadding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          border:
-                                                                              OutlineInputBorder(),
-                                                                          labelText:
-                                                                              'Password',
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            30,
-                                                                      ),
-                                                                      TextFormField(
-                                                                        onTap: () {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    220,
-                                                                          );
-                                                                        },
-                                                                        onFieldSubmitted: (
-                                                                          value,
-                                                                        ) {
-                                                                          setBottomState(
-                                                                            () =>
-                                                                                keyboarHeight =
-                                                                                    0,
-                                                                          );
-                                                                        },
-                                                                        controller:
-                                                                            metadataController,
-                                                                        autovalidateMode:
-                                                                            AutovalidateMode.onUserInteraction,
-                                                                        validator: (
-                                                                          value,
-                                                                        ) {
-                                                                          if (value!
-                                                                              .isEmpty) {
-                                                                            return 'Field required';
-                                                                          }
-                                                                          return null;
-                                                                        },
-
-                                                                        decoration: InputDecoration(
-                                                                          contentPadding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                          ),
-                                                                          border:
-                                                                              OutlineInputBorder(),
-                                                                          labelText:
-                                                                              '2fa',
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                              );
+                                                            },
                                                           );
                                                         },
                                                       );
                                                     },
-                                                  );
-                                                },
-                                                child: Icon(
-                                                  Icons.add_circle,
-                                                  color: Colors.blue.shade400,
-                                                  semanticLabel: 'Add stock',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      ...stockValue.map((AccountStock e) {
-                                        return Container(
-                                          // width: 100,
-                                          margin: EdgeInsets.only(bottom: 15),
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 8,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: BorderSide(
-                                                width: 1.2,
-                                                color: Colors.black.withValues(
-                                                  alpha: 0.2,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  SizedBox(
-                                                    width: deviceWidth * 0.7,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          'Username/email: ${e.email}',
-                                                          softWrap: true,
-                                                        ),
-                                                        Text(
-                                                          'Password: ${e.password}',
-                                                        ),
-                                                        Text(
-                                                          '2fa: ${e.metadata['2fa']}',
-                                                        ),
-                                                      ],
+                                                    child: Icon(
+                                                      Icons.edit_square,
+                                                      color:
+                                                          Colors.blue.shade400,
+                                                      semanticLabel:
+                                                          'Edit stock',
                                                     ),
                                                   ),
-                                                  Text(
-                                                    e.status,
-                                                    style: TextStyle(
+                                                  SizedBox(width: 5),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      keyboarHeight = 0;
+                                                      _formKey.currentState
+                                                          ?.reset();
+                                                      emailController.clear();
+                                                      passwordController
+                                                          .clear();
+                                                      metadataController
+                                                          .clear();
+
+                                                      showModalBottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return StatefulBuilder(
+                                                            builder: (
+                                                              context,
+                                                              setBottomState,
+                                                            ) {
+                                                              return Container(
+                                                                padding:
+                                                                    EdgeInsets.only(
+                                                                      left: 20,
+                                                                      right: 20,
+                                                                      top: 12,
+                                                                      bottom:
+                                                                          keyboarHeight +
+                                                                          50,
+                                                                    ),
+                                                                width:
+                                                                    double
+                                                                        .infinity,
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Row(
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          onTap:
+                                                                              () => Navigator.pop(
+                                                                                context,
+                                                                              ),
+                                                                          child: Icon(
+                                                                            Icons.arrow_back_rounded,
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              deviceWidth *
+                                                                              0.5,
+                                                                          margin: EdgeInsets.only(
+                                                                            top:
+                                                                                3,
+                                                                          ),
+                                                                          child: Text(
+                                                                            'Add Stock ${account.name}',
+
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                              fontSize:
+                                                                                  16,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          child: Align(
+                                                                            alignment:
+                                                                                Alignment.centerRight,
+                                                                            child: GestureDetector(
+                                                                              onTap: () async {
+                                                                                if (_formKey.currentState!.validate()) {
+                                                                                  final AccountStock newAccount = AccountStock(
+                                                                                    product: {
+                                                                                      'id':
+                                                                                          account.id,
+                                                                                    },
+                                                                                    email:
+                                                                                        emailController.text,
+                                                                                    password:
+                                                                                        passwordController.text,
+                                                                                    status:
+                                                                                        'available',
+                                                                                    createdAt:
+                                                                                        DateTime.now().toString(),
+                                                                                    category:
+                                                                                        account.category,
+                                                                                    metadata: {
+                                                                                      '2fa':
+                                                                                          metadataController.text,
+                                                                                    },
+                                                                                  );
+                                                                                  final accountStock =
+                                                                                      controller.accountStocks.length;
+
+                                                                                  await controller.addAccountStock(
+                                                                                    newAccount,
+                                                                                  );
+                                                                                  final accountStockAfterAdd =
+                                                                                      controller.accountStocks.length;
+                                                                                  if (context.mounted) {
+                                                                                    Navigator.pop(
+                                                                                      context,
+                                                                                    );
+                                                                                    ScaffoldMessenger.of(
+                                                                                      context,
+                                                                                    ).showSnackBar(
+                                                                                      SnackBar(
+                                                                                        content: Text(
+                                                                                          accountStock <
+                                                                                                  accountStockAfterAdd
+                                                                                              ? 'Stock added succesfully'
+                                                                                              : 'Failed add stcok',
+                                                                                        ),
+                                                                                      ),
+                                                                                    );
+                                                                                  }
+                                                                                }
+                                                                              },
+                                                                              child: Container(
+                                                                                padding: EdgeInsets.all(
+                                                                                  8,
+                                                                                ),
+                                                                                decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                    8,
+                                                                                  ),
+                                                                                  color:
+                                                                                      Colors.blue.shade300,
+                                                                                ),
+                                                                                margin: EdgeInsets.only(
+                                                                                  top:
+                                                                                      2,
+                                                                                ),
+                                                                                child: Text(
+                                                                                  'Save',
+                                                                                  style: TextStyle(
+                                                                                    fontSize:
+                                                                                        14,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          30,
+                                                                    ),
+                                                                    Form(
+                                                                      key:
+                                                                          _formKey,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          TextFormField(
+                                                                            onTap: () {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        220,
+                                                                              );
+                                                                            },
+                                                                            onFieldSubmitted: (
+                                                                              value,
+                                                                            ) {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        0,
+                                                                              );
+                                                                            },
+                                                                            controller:
+                                                                                emailController,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
+                                                                              }
+                                                                              return null;
+                                                                            },
+
+                                                                            decoration: InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                              labelText:
+                                                                                  'Username/email',
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                30,
+                                                                          ),
+                                                                          TextFormField(
+                                                                            onTap: () {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        220,
+                                                                              );
+                                                                            },
+                                                                            onFieldSubmitted: (
+                                                                              value,
+                                                                            ) {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        0,
+                                                                              );
+                                                                            },
+                                                                            controller:
+                                                                                passwordController,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
+                                                                              }
+                                                                              return null;
+                                                                            },
+
+                                                                            decoration: InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                              labelText:
+                                                                                  'Password',
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                30,
+                                                                          ),
+                                                                          TextFormField(
+                                                                            onTap: () {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        220,
+                                                                              );
+                                                                            },
+                                                                            onFieldSubmitted: (
+                                                                              value,
+                                                                            ) {
+                                                                              setBottomState(
+                                                                                () =>
+                                                                                    keyboarHeight =
+                                                                                        0,
+                                                                              );
+                                                                            },
+                                                                            controller:
+                                                                                metadataController,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator: (
+                                                                              value,
+                                                                            ) {
+                                                                              if (value!.isEmpty) {
+                                                                                return 'Field required';
+                                                                              }
+                                                                              return null;
+                                                                            },
+
+                                                                            decoration: InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(
+                                                                                horizontal:
+                                                                                    8,
+                                                                              ),
+                                                                              border:
+                                                                                  OutlineInputBorder(),
+                                                                              labelText:
+                                                                                  '2fa',
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      Icons.add_circle,
                                                       color:
-                                                          e.status ==
-                                                                  'available'
-                                                              ? Colors
-                                                                  .green
-                                                                  .shade300
-                                                              : e.status ==
-                                                                  'reserved'
-                                                              ? Colors.orange
-                                                              : Colors
-                                                                  .red
-                                                                  .shade400,
+                                                          Colors.blue.shade400,
+                                                      semanticLabel:
+                                                          'Add stock',
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ],
                                           ),
-                                        );
-                                      }),
-                                    ],
-                                  ),
+                                          ...stockValue.map((AccountStock e) {
+                                            return Container(
+                                              // width: 100,
+                                              margin: EdgeInsets.only(
+                                                bottom: 15,
+                                              ),
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 8,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    width: 1.2,
+                                                    color: Colors.black
+                                                        .withValues(alpha: 0.2),
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      SizedBox(
+                                                        width:
+                                                            deviceWidth * 0.7,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              'Username/email: ${e.email}',
+                                                              softWrap: true,
+                                                            ),
+                                                            Text(
+                                                              'Password: ${e.password}',
+                                                            ),
+                                                            Text(
+                                                              '2fa: ${e.metadata['2fa']}',
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        e.status,
+                                                        style: TextStyle(
+                                                          color:
+                                                              e.status ==
+                                                                      'available'
+                                                                  ? Colors
+                                                                      .green
+                                                                      .shade300
+                                                                  : e.status ==
+                                                                      'reserved'
+                                                                  ? Colors
+                                                                      .orange
+                                                                  : Colors
+                                                                      .red
+                                                                      .shade400,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

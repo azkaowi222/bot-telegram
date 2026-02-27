@@ -24,7 +24,6 @@ class AccountStock {
   });
 
   factory AccountStock.fromJson(Map<String, dynamic> json) {
-    print(json);
     return AccountStock(
       id: json['_id'] ?? 'no _id',
       product: json['product'] ?? {'product': 'no product'},
