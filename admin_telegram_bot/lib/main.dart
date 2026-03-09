@@ -759,6 +759,19 @@ class _MainPageState extends State<MainPage> {
                                                             child: Text('100'),
                                                           ),
                                                         ),
+                                                        PopupMenuItem(
+                                                          child: TextButton(
+                                                            onPressed: () {
+                                                              seBottomState(() {
+                                                                balance = 200;
+                                                              });
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
+                                                            },
+                                                            child: Text('200'),
+                                                          ),
+                                                        ),
                                                       ],
                                                 ),
                                               ),

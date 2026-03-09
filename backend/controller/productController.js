@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import Account from "../models/account.js";
 import Product from "../models/product.js";
 import Users from "../models/user.js";
@@ -6,24 +7,6 @@ import mongoose from "mongoose";
 
 export const getAllProducts = async (req, res) => {
   try {
-    // Github Student Pack
-    // // Mail .edu (microsoft)
-    // const products = await Product.updateOne(
-    //   {
-    //     name: "Mail .edu (microsoft)",
-    //   },
-    //   {
-    //     image_path: "email_edu.jpg",
-    //   }
-    // );
-    // const stockAzure = await Account.find({
-    //   product: "6934f902a2bd1f55eeb4d09c",
-    // }).countDocuments();
-    // const products = await Product.find().lean();
-    await Product.deleteMany({
-      name: "liking",
-    });
-
     const products = await Product.aggregate([
       {
         $lookup: {
@@ -235,6 +218,8 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const sendBroadcast = async (req, res) => {
   const { message } = req.body;
+  const image = req.files?.image;
+  const imagePath = image?.name;
 
   if (!message) {
     return res.status(400).json({
@@ -243,17 +228,22 @@ export const sendBroadcast = async (req, res) => {
     });
   }
 
+  if (!image) {
+    await sendMessage(message, res);
+    return;
+  }
+
+  await sendPhoto(message, imagePath, image, res);
+};
+
+const sendMessage = async (message, res) => {
   try {
     const users = await Users.find().lean();
 
-    // Siapkan variabel untuk laporan
     let successCount = 0;
     let failCount = 0;
     const errors = [];
 
-    // PROSES PENGIRIMAN
-    // Kita loop user, tapi kita bungkus try-catch DI DALAM loop
-    // agar kalau 1 gagal, yang lain tetap jalan.
     for (const user of users) {
       if (!user.telegramId) continue; // Skip jika tidak ada ID
 
@@ -284,13 +274,78 @@ export const sendBroadcast = async (req, res) => {
         failCount++;
         errors.push({ userId: user.telegramId, error: err.message });
       }
-
-      // PENTING: Beri jeda sedikit agar tidak kena Rate Limit Telegram
-      // 50ms = 20 pesan per detik (aman)
       await sleep(50);
     }
+    return res.status(200).json({
+      status: "success",
+      report: {
+        total_users: users.length,
+        sent_success: successCount,
+        sent_failed: failCount,
+        errors_sample: errors.slice(0, 5), // Tampilkan 5 error pertama saja agar tidak penuh
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
 
-    // Response mengembalikan laporan lengkap
+const sendPhoto = async (message, image, move, res) => {
+  try {
+    const users = await Users.find().lean();
+
+    let successCount = 0;
+    let failCount = 0;
+    const errors = [];
+
+    const dirname = import.meta.dirname;
+    const uploadPath = path.join(
+      dirname.replace("controller", ""),
+      "public",
+      image,
+    );
+    await move.mv(uploadPath);
+
+    for (const user of users) {
+      if (!user.telegramId) continue; // Skip jika tidak ada ID
+      try {
+        const form = new FormData();
+        const buffer = fs.readFileSync(uploadPath);
+        const blob = new Blob([buffer], { type: "image/png" });
+        form.append("chat_id", user.telegramId);
+        form.append("photo", blob, image);
+        form.append("caption", message);
+        const response = await fetch(
+          `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendPhoto`,
+          {
+            method: "POST",
+
+            body: form,
+          },
+        );
+
+        const data = await response.json();
+        if (!data.ok) {
+          // Jika Telegram menolak (misal: user memblokir bot)
+          failCount++;
+          errors.push({ userId: user.telegramId, error: data.description });
+        } else {
+          successCount++;
+        }
+        await sleep(50);
+      } catch (err) {
+        // Jika error jaringan / fetch gagal
+        failCount++;
+        errors.push({ userId: user.telegramId, error: err.message });
+        return res.status(500).json({
+          status: "failed",
+          message: err.message,
+        });
+      }
+    }
     return res.status(200).json({
       status: "success",
       report: {

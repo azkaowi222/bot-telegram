@@ -12,7 +12,9 @@ class ProductController extends ChangeNotifier {
   List<ProductModel> _products = [];
   List<ProductModel> get products => _products;
   List<String> get categories => _categories;
+  String? _imageName;
   File? _image;
+  String? get imageName => _imageName;
   File? get images => _image;
   set images(File? value) {
     _image = value;
@@ -32,6 +34,7 @@ class ProductController extends ChangeNotifier {
     if (pickedFile != null) {
       debugPrint('images terisi');
       _image = File(pickedFile.path);
+      _imageName = pickedFile.name;
     }
   }
 
@@ -201,19 +204,45 @@ class ProductController extends ChangeNotifier {
 
   Future<String> sendBroadcast(String message) async {
     try {
-      final response = await http.post(
+      final request = http.MultipartRequest(
+        'POST',
         Uri.parse('$backendUrl/api/broadcast'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'message': message}),
       );
-      if (response.statusCode != 200) {
-        return 'failed to send broadcast';
+      request.fields['message'] = message;
+
+      if (_image != null) {
+        final multipartFile = await http.MultipartFile.fromPath(
+          'image',
+          _image!.path,
+        );
+        request.files.add(multipartFile);
       }
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
       final data = jsonDecode(response.body);
+      _image = null;
+      _imageName = null;
       return '${data['status']} send broadcast';
     } catch (e) {
       print('Error exception ${e.toString()}');
       return 'failed to send broadcast';
+    } finally {
+      notifyListeners();
     }
+    // try {
+    //   final response = await http.post(
+    //     Uri.parse('$backendUrl/api/broadcast'),
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: jsonEncode({'message': message}),
+    //   );
+    //   if (response.statusCode != 200) {
+    //     return 'failed to send broadcast';
+    //   }
+    //   final data = jsonDecode(response.body);
+    //   return '${data['status']} send broadcast';
+    // } catch (e) {
+    //   print('Error exception ${e.toString()}');
+    //   return 'failed to send broadcast';
+    // }
   }
 }

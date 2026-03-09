@@ -3,6 +3,7 @@ import 'package:admin_telegram_bot/controllers/product_controller.dart';
 import 'package:admin_telegram_bot/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Products extends StatefulWidget {
   final ProductController controller;
@@ -33,6 +34,7 @@ class _ProductsState extends State<Products> {
   }
 
   final TextEditingController messageController = TextEditingController();
+  String? imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,7 @@ class _ProductsState extends State<Products> {
             IconButton(
               onPressed: () {
                 messageController.clear();
+                imagePath = null;
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -58,6 +61,40 @@ class _ProductsState extends State<Products> {
                         alignment: Alignment.center,
                         child: Text('Broadcast'),
                       ),
+
+                      actions: [
+                        StatefulBuilder(
+                          builder: (context, setBroadcastState) {
+                            return GestureDetector(
+                              onTap: () async {
+                                await widget.controller.pickImage(
+                                  source: ImageSource.gallery,
+                                );
+
+                                if (widget.controller.images != null) {
+                                  setBroadcastState(() {
+                                    imagePath = widget.controller.imageName;
+                                  });
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.attach_file, size: 15),
+                                  SizedBox(width: 2.5),
+                                  Text(
+                                    imagePath != null
+                                        ? imagePath.toString()
+                                        : 'Attach File',
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                      actionsPadding: EdgeInsets.only(left: 10, bottom: 10),
+                      actionsAlignment: MainAxisAlignment.start,
                       titlePadding: EdgeInsets.all(8),
                       shape: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -71,6 +108,7 @@ class _ProductsState extends State<Products> {
                           minLines: 4,
                           maxLines: null,
                           textInputAction: TextInputAction.newline,
+
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 8,
