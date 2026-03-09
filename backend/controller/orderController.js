@@ -139,7 +139,7 @@ export const getAllOrders = async (req, res) => {
         product: product.nameSnapshot,
         status: order.status,
         payment: order.paymentMethod,
-        image_path: product.product.image_path ?? "no path",
+        image_path: product?.product?.image_path ?? "no path",
         date: order.createdAt,
       });
     }
