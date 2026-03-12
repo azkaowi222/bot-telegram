@@ -64,3 +64,4 @@ jobs:
           app-name: "mannxstore-bot"
           slot-name: "Production"
           package: release.zip
+
