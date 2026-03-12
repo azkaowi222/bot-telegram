@@ -53,9 +53,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6FAF90D520CD48FF86C6E6357E636212 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A01D99DCECEF47E2BFA858E3B1DBF74A }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CB48AFA6320443A98074AC49A8864D66 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_fd1f04ca-a7d1-46b5-bbea-e89276027f47 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_a1fe51c7-a2dc-4275-be53-27bd31e8c551 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_346d0079-db23-4633-b91e-c917cd8a7c69 }}
 
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
@@ -64,4 +64,5 @@ jobs:
           app-name: "mannxstore-bot"
           slot-name: "Production"
           package: release.zip
+
 
