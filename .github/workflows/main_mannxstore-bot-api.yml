@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - mannxstore-bot
+name: Build and deploy Node.js app to Azure Web App - mannxstore-bot-api
 
 on:
   push:
@@ -21,21 +21,19 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: "24.x"
+          node-version: '24.x'
 
       - name: npm install, build, and test
-        working-directory: ./backend
         run: |
           npm install
           npm run build --if-present
-          # npm run test --if-present
-          zip -r release.zip ./*
+          npm run test --if-present
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: backend/release.zip
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,22 +47,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D2D5604FFCF642A19EE0A69D9C53D403 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_693CA9508125473C8BB938CCF991B91B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1A43DE3621034F44BD2C52B82078F622 }}
 
-      - name: "Deploy to Azure Web App"
+      - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "mannxstore-bot"
-          slot-name: "Production"
-          package: release.zip
-
-
-
-
+          app-name: 'mannxstore-bot-api'
+          slot-name: 'Production'
+          package: .
+          
