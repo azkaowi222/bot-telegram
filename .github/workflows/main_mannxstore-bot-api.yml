@@ -61,6 +61,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "mannxstore-bot"
+          app-name: "mannxstore-bot-api"
           slot-name: "Production"
           package: release.zip
+
