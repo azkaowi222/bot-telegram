@@ -133,6 +133,7 @@ export const getAllOrders = async (req, res) => {
       })
         .populate("product")
         .lean();
+      console.log(product);
       fullInfoOrders.push({
         id: order._id,
         soldBy: order.user.username ?? order.user.telegramId,

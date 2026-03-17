@@ -38,7 +38,6 @@ class _ProductsState extends State<Products> {
 
   @override
   Widget build(BuildContext context) {
-    print('page products dipanggil');
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -116,6 +115,7 @@ class _ProductsState extends State<Products> {
                             ),
                             suffixIcon: IconButton(
                               onPressed: () async {
+                                //for jumpdot
                                 final message = await widget.controller
                                     .sendBroadcast(messageController.text);
                                 if (context.mounted) {

@@ -230,18 +230,21 @@ const detailProducts = (
   product = {
     productId: "",
     name: "",
+    description: "",
     price: 0,
     balance: 0,
     quantity: 1,
     stock: 0,
   },
 ) => {
+  console.log(product.description);
+  console.log(product.description === null || " ");
   return ctx.editMessageText(
     `📦 Detail Product\n\n🏷️ Nama: ${product.name}\n💵 Saldo: ${
       product.balance ? `$${product.balance}` : product.balance
     }\n💰 Harga: ${product.price * product.quantity}k\n🛍️ Stock: ${
       product.stock ?? 0
-    }\n\n${tips}`,
+    }\n\n${tips}\n\nNotes: ${product.description?.length > 10 ? product.description : "-"}`,
     {
       parse_mode: "HTML",
       reply_markup: {
@@ -318,6 +321,7 @@ bot.action(/^product_(.+)$/, async (ctx) => {
       productId: product._id,
       name: product.name,
       balance: product.balance,
+      description: product?.description,
       price: product.price,
       quantity: ctx.session[`${prefix}qty`],
       stock,
@@ -381,6 +385,7 @@ bot.action(/^plus_(.+)$/, async (ctx) => {
       productId: product._id,
       name: product.name,
       balance: product.balance,
+      description: product?.description,
       price: product.price,
       quantity: ctx.session[`${prefix}qty`],
       stock,
@@ -414,6 +419,7 @@ bot.action(/^minus_(.+)$/, async (ctx) => {
       productId: product._id,
       name: product.name,
       balance: product.balance,
+      description: product?.description,
       price: product.price,
       quantity: ctx.session[`${prefix}qty`],
       stock,
