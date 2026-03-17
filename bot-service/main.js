@@ -237,8 +237,6 @@ const detailProducts = (
     stock: 0,
   },
 ) => {
-  console.log(product.description);
-  console.log(product.description === null || " ");
   return ctx.editMessageText(
     `📦 Detail Product\n\n🏷️ Nama: ${product.name}\n💵 Saldo: ${
       product.balance ? `$${product.balance}` : product.balance
