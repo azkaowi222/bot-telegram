@@ -76,8 +76,13 @@ export const createUser = async (req, res) => {
 
 export const storeToken = async (req, res) => {
   const { token } = req.params;
-  console.log(`token: ${token}`);
   try {
+    if (!token) {
+      return res.status(400).json({
+        status: "failed",
+        message: "field token required",
+      });
+    }
     const adminID = process.env.ADMIN_ID;
     await User.updateOne(
       {
