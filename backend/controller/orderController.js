@@ -133,10 +133,9 @@ export const getAllOrders = async (req, res) => {
       })
         .populate("product")
         .lean();
-      console.log(product);
       fullInfoOrders.push({
         id: order._id,
-        soldBy: order.user.username ?? order.user.telegramId,
+        soldBy: order.user?.username ?? order.user?.telegramId ?? "not found",
         product: product.nameSnapshot,
         status: order.status,
         payment: order.paymentMethod,
