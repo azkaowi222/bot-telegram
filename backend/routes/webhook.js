@@ -172,12 +172,11 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
 
 function getAccessToken() {
   return new Promise(function (resolve, reject) {
-    const privateKey = Buffer.from(process.env.PRIVATE_KEY, "base64").toString(
-      "utf-8",
-    );
+    const credentials = JSON.parse(process.env.FIREBASE_JSON);
+    console.log(credentials.private_key);
     const jwtClient = new google.auth.JWT({
-      email: process.env.CLIENT_EMAIL,
-      key: privateKey,
+      email: credentials.client_email,
+      key: credentials.private_key,
       scopes: ["https://www.googleapis.com/auth/firebase.messaging"],
     });
     jwtClient.authorize(function (err, tokens) {
