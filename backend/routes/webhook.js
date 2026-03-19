@@ -114,18 +114,14 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
     );
 
     const accesToken = await getAccessToken();
-    console.log(`admin id: ${process.env.ADMIN_ID}`);
     const admin = await User.findOne({
       telegramId: process.env.ADMIN_ID,
     }).lean();
-    console.log(admin);
     if (!admin) {
       throw new Error("Admin dengan Telegram ID tersebut tidak ditemukan");
     }
-    const fcmToken = admin?.fcmToken;
-
-    console.log(`fcmToken: ${fcmToken}`);
-    const responsefcm = await fetch(
+    const fcmToken = admin.fcmToken;
+    await fetch(
       "https://fcm.googleapis.com/v1/projects/first-project-a76cd/messages:send",
       {
         method: "POST",
@@ -141,7 +137,7 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
               title: "FCM Message",
             },
             android: {
-              priority: "high",
+              priority: "normal",
               notification: {
                 channel_id: "high_importance_channel",
               },
@@ -155,7 +151,6 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
         }),
       },
     );
-    console.log(await responsefcm.text());
 
     await session.commitTransaction();
     session.endSession();
@@ -177,9 +172,10 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
 
 function getAccessToken() {
   return new Promise(function (resolve, reject) {
+    const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
     const jwtClient = new google.auth.JWT({
       email: process.env.CLIENT_EMAIL,
-      key: process.env.PRIVATE_KEY,
+      key: privateKey,
       scopes: ["https://www.googleapis.com/auth/firebase.messaging"],
     });
     jwtClient.authorize(function (err, tokens) {
