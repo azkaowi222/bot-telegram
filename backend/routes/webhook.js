@@ -172,7 +172,9 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
 
 function getAccessToken() {
   return new Promise(function (resolve, reject) {
-    const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+    const privateKey = Buffer.from(process.env.PRIVATE_KEY, "base64").toString(
+      "utf-8",
+    );
     const jwtClient = new google.auth.JWT({
       email: process.env.CLIENT_EMAIL,
       key: privateKey,
