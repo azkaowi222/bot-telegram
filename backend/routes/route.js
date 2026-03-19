@@ -12,6 +12,7 @@ import {
   createUser,
   getAllUsers,
   getUserById,
+  storeToken,
 } from "../controller/userController.js";
 
 import {
@@ -33,6 +34,7 @@ const router = express.Router();
 router.get("/users", getAllUsers);
 router.get("/user/:id", getUserById);
 router.post("/register", createUser);
+router.get("/store-token/:token", storeToken);
 
 //product controller
 router.get("/products", getAllProducts);

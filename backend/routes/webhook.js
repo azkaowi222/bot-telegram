@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
 import express from "express";
 import Order from "../models/order.js";
+import User from "../models/user.js";
 import Payment from "../models/payment.js";
 import OrderItem from "../models/orderItem.js";
 import Account from "../models/account.js";
+import { google } from "googleapis";
+import dotenv from "dotenv";
+
+dotenv.config({
+  quiet: true,
+});
 
 const router = express.Router();
 
@@ -106,6 +113,50 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
       },
     );
 
+    const accesToken = await getAccessToken();
+    console.log(`admin id: ${process.env.ADMIN_ID}`);
+    const admin = await User.findOne({
+      telegramId: process.env.ADMIN_ID,
+    }).lean();
+    console.log(admin);
+    if (!admin) {
+      throw new Error("Admin dengan Telegram ID tersebut tidak ditemukan");
+    }
+    const fcmToken = admin?.fcmToken;
+
+    console.log(`fcmToken: ${fcmToken}`);
+    const responsefcm = await fetch(
+      "https://fcm.googleapis.com/v1/projects/first-project-a76cd/messages:send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accesToken}`,
+        },
+        body: JSON.stringify({
+          message: {
+            token: fcmToken,
+            notification: {
+              body: "Ada Orderan baru nich!!",
+              title: "FCM Message",
+            },
+            android: {
+              priority: "high",
+              notification: {
+                channel_id: "high_importance_channel",
+              },
+            },
+            webpush: {
+              headers: {
+                Urgency: "high",
+              },
+            },
+          },
+        }),
+      },
+    );
+    console.log(await responsefcm.text());
+
     await session.commitTransaction();
     session.endSession();
 
@@ -114,6 +165,7 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
       data: deliveredAccounts,
     });
   } catch (error) {
+    console.log(`ada error $${error.message}`);
     await session.abortTransaction();
     session.endSession();
     return res.status(500).json({
@@ -122,5 +174,22 @@ Semoga awet dan lancar. Ditunggu order selanjutnya...`,
     });
   }
 });
+
+function getAccessToken() {
+  return new Promise(function (resolve, reject) {
+    const jwtClient = new google.auth.JWT({
+      email: process.env.CLIENT_EMAIL,
+      key: process.env.PRIVATE_KEY,
+      scopes: ["https://www.googleapis.com/auth/firebase.messaging"],
+    });
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(tokens.access_token);
+    });
+  });
+}
 
 export default router;

@@ -1,4 +1,9 @@
 import User from "../models/user.js";
+import dotenv from "dotenv";
+
+dotenv.config({
+  quiet: true,
+});
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -63,6 +68,31 @@ export const createUser = async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
+
+export const storeToken = async (req, res) => {
+  const { token } = req.params;
+  console.log(`token: ${token}`);
+  try {
+    const adminID = process.env.ADMIN_ID;
+    await User.updateOne(
+      {
+        telegramId: adminID,
+      },
+      {
+        fcmToken: token,
+      },
+    );
+    return res.status(200).json({
+      status: "success",
+      message: "token sucessfully stored",
+    });
+  } catch (error) {
+    return res.status(500).json({
       status: "failed",
       message: error.message,
     });

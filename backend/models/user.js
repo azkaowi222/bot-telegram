@@ -6,8 +6,9 @@ const userSchema = new mongoose.Schema(
     username: { type: String },
     firstName: { type: String },
     lastName: { type: String },
+    fcmToken: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("User", userSchema);

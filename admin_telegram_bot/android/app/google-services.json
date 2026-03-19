@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "980400043732",
+    "project_id": "first-project-a76cd",
+    "storage_bucket": "first-project-a76cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980400043732:android:fe68adee33cc1cd70b2d41",
+        "android_client_info": {
+          "package_name": "com.example.admin_telegram_bot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxa3nHZUCzODnu6e9mBrcJBCCZEHZBGK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

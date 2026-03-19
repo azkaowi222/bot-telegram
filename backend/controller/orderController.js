@@ -11,7 +11,7 @@ export const createOrder = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { user, items } = req.body;
+    const { user, items, token } = req.body;
     const expiredOrders = new Date(Date.now() + 5 * 60 * 1000);
 
     let totalPrice = 0;
