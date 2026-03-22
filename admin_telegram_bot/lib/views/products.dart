@@ -4,6 +4,7 @@ import 'package:admin_telegram_bot/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Products extends StatefulWidget {
   final ProductController controller;
@@ -38,6 +39,8 @@ class _ProductsState extends State<Products> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -115,10 +118,35 @@ class _ProductsState extends State<Products> {
                             ),
                             suffixIcon: IconButton(
                               onPressed: () async {
-                                //for jumpdot
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return Stack(
+                                      children: [
+                                        SizedBox(
+                                          height: deviceHeight * 0.80,
+                                          width: deviceWidth,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              LoadingAnimationWidget.threeRotatingDots(
+                                                color: Colors.white,
+                                                size: 30,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+
                                 final message = await widget.controller
                                     .sendBroadcast(messageController.text);
                                 if (context.mounted) {
+                                  Navigator.pop(context);
                                   Navigator.pop(context);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -439,10 +467,13 @@ void bottomBar(
   ProductModel product,
 ) {
   int keyboarHeight = 0;
-  print(keyboarHeight);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final productNameController = TextEditingController(text: product.name);
   final priceController = TextEditingController(text: product.price.toString());
+  final descriptionController = TextEditingController(
+    text: product.description,
+  );
+
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -478,7 +509,7 @@ void bottomBar(
                           SizedBox(width: 5),
                           Container(
                             margin: EdgeInsets.only(top: 2),
-                            child: Text('Edit product'),
+                            child: Text('Edit Product'),
                           ),
                         ],
                       ),
@@ -490,6 +521,7 @@ void bottomBar(
                             id: product.id,
                             name: productNameController.text,
                             balance: product.balance,
+                            description: descriptionController.text,
                             price:
                                 num.tryParse(priceController.text) ??
                                 product.price,
@@ -591,6 +623,33 @@ void bottomBar(
                             }
                             if (value[0] == '0') {
                               return 'First character not allowed';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 30),
+                        TextFormField(
+                          textInputAction: TextInputAction.newline,
+                          onTapOutside: (_) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            setBottomState(() => keyboarHeight = 0);
+                          },
+                          onFieldSubmitted: (_) {
+                            setBottomState(() => keyboarHeight = 0);
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                            border: OutlineInputBorder(),
+                            labelText: 'Description',
+                          ),
+                          onTap: () {
+                            setBottomState(() => keyboarHeight = 200);
+                          },
+                          controller: descriptionController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Field required';
                             }
                             return null;
                           },
