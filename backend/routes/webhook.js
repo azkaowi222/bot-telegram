@@ -87,32 +87,7 @@ router.post("/webhook/callback", async (req, res) => {
 \`${account.metadata["2fa"]}\`
 `;
     });
-
-    await fetch(
-      `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chat_id: order.user.telegramId,
-          text: `===========================
-💰 Pembayaran berhasil!
-Pesanan Anda sudah diproses.
-===========================
-
-📦 *Informasi Akun*:
-
-${accountToSend.join("")}
-
-Terimakasih sudah order di MannStore 😊.
-Semoga awet dan lancar. Ditunggu order selanjutnya...`,
-          parse_mode: "Markdown",
-        }),
-      },
-    );
-
+    await sendMessageWithRetry(order, accountToSend);
     const accesToken = await getAccessToken();
     const admin = await User.findOne({
       telegramId: process.env.ADMIN_ID,
@@ -188,5 +163,46 @@ function getAccessToken() {
     });
   });
 }
+
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const sendMessageWithRetry = async (order, accountToSend, retry = 3) => {
+  try {
+    return await fetch(
+      `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: order.user.telegramId,
+          text: `===========================
+💰 Pembayaran berhasil!
+Pesanan Anda sudah diproses.
+===========================
+
+📦 *Informasi Akun*:
+
+${accountToSend.join("")}
+
+Terimakasih sudah order di MannStore 😊.
+Semoga awet dan lancar. Ditunggu order selanjutnya...`,
+          parse_mode: "Markdown",
+        }),
+      },
+    );
+  } catch (err) {
+    if (err.response?.status === 429 && retry > 0) {
+      const wait = err.response.data.parameters?.retry_after || 1;
+      console.log(`Retry after ${wait}s...`);
+      await delay(wait * 1000);
+
+      return sendMessageWithRetry(order, accountToSend, retry - 1);
+    }
+
+    throw err;
+  }
+};
 
 export default router;
